@@ -48,7 +48,7 @@ const parentDir = dirname(currentDir);
 const clientBuildDir = join(parentDir, 'client', 'build', 'index.html');
 
 const clientBuildDir2 = join(parentDir, 'client', 'public', 'index.html');
-console.log("🚀 ~ file: index.js:51 ~ clientBuildDir2:", clientBuildDir2)
+
 
 
 
