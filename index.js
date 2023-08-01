@@ -8,6 +8,7 @@ import user from './routes/userRoutes.js';
 import post from './routes/postRoutes.js';
 import comments from './routes/commentRoutes.js';
 import likes from './routes/likeRoutes.js';
+
 //______App.js end_____________
 
 
@@ -40,12 +41,12 @@ app.use("/uploads", express.static("uploads"));
 
 
 if (process.env.NODE_ENV === 'production') {
-    // Serve the frontend build files
-    app.use(express.static(path.join(process.cwd(), 'client', 'build')));
+    // Set the static folder to serve the frontend build
+    app.use(express.static(path.join(__dirname, 'client', 'build')));
 
     // Serve the frontend's index.html for all other routes
     app.get('*', (req, res) => {
-        res.sendFile(path.join(process.cwd(), 'client', 'build', 'index.html'));
+        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
     });
 }
 
