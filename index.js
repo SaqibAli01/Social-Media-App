@@ -47,7 +47,8 @@ const currentDir = dirname(__filename);
 const parentDir = dirname(currentDir);
 const clientBuildDir = join(parentDir, 'client', 'build');
 
-const clientBuildDir2 = join(parentDir, 'client', 'build', 'index.html');
+const clientBuildDir2 = join(parentDir, 'client', 'public', 'index.html');
+console.log("🚀 ~ file: index.js:51 ~ clientBuildDir2:", clientBuildDir2)
 
 
 
@@ -67,7 +68,7 @@ const clientBuildDir2 = join(parentDir, 'client', 'build', 'index.html');
 
 
 
-app.use(express.static(join(clientBuildDir, 'public')));
+app.use(express.static(clientBuildDir));
 
 // Serve the frontend's index.html for all other routes
 app.get('*', (req, res) => {
