@@ -36,12 +36,11 @@ app.use(likes);
 //multer //image frontend
 app.use("/uploads", express.static("uploads"));
 //frontend connect 
-// app.use(express.static(path.join(path.resolve(), "static")));
+app.use(express.static(path.join(path.resolve(), "static")));
 //______end app.js ____
 
 //frontend connect
-// const pathFind = path.join(process.cwd())
-// console.log("pathFind", pathFind)
+
 
 const __filename = fileURLToPath(import.meta.url);
 const currentDir = dirname(__filename);
