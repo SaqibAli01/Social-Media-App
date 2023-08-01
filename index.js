@@ -36,7 +36,7 @@ app.use(likes);
 //multer //image frontend
 app.use("/uploads", express.static("uploads"));
 //frontend connect 
-app.use(express.static(path.join(path.resolve(), "static")));
+// app.use(express.static(path.join(path.resolve(), "static")));
 //______end app.js ____
 
 //frontend connect
@@ -49,12 +49,12 @@ const clientBuildDir = join(parentDir, 'client', 'build');
 
 const clientBuildDir2 = join(parentDir, 'client', 'build', 'index.html');
 
-console.log("pathFind", clientBuildDir2);
+console.log("pathFind", clientBuildDir);
 
 
 if (process.env.NODE_ENV === 'production') {
     // Serve the frontend build files
-    app.use(express.static(clientBuildDir));
+    app.use(express.static(clientBuildDir2));
 
     // Serve the frontend's index.html for all other routes
     app.get('*', (req, res) => {
