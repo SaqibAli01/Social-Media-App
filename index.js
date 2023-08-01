@@ -33,17 +33,18 @@ app.use(likes);
 //multer //image frontend
 app.use("/uploads", express.static("uploads"));
 //frontend connect 
-app.use(express.static(path.join(path.resolve(), "static")));
+// app.use(express.static(path.join(path.resolve(), "static")));
 //______end app.js ____
 
 //frontend connect
+
+
 if (process.env.NODE_ENV === 'production') {
     // Serve the frontend build files
-    app.use(express.static(path.join(process.cwd(), 'frontend', 'build')));
-
+    app.use(express.static(path.join(process.cwd(), 'client', 'build')));
     // Serve the frontend's index.html for all other routes
     app.get('*', (req, res) => {
-        res.sendFile(path.join(process.cwd(), 'frontend', 'build', 'index.html'));
+        res.sendFile(path.join(process.cwd(), 'client', 'build', 'index.html'));
     });
 }
 // if (process.env.NODE_ENV === "production") {
