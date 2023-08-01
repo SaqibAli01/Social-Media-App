@@ -8,6 +8,8 @@ import user from './routes/userRoutes.js';
 import post from './routes/postRoutes.js';
 import comments from './routes/commentRoutes.js';
 import likes from './routes/likeRoutes.js';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 //______App.js end_____________
 
@@ -38,15 +40,26 @@ app.use("/uploads", express.static("uploads"));
 //______end app.js ____
 
 //frontend connect
+// const pathFind = path.join(process.cwd())
+// console.log("pathFind", pathFind)
+
+const __filename = fileURLToPath(import.meta.url);
+const currentDir = dirname(__filename);
+const parentDir = dirname(currentDir);
+const clientBuildDir = join(parentDir, 'client', 'build');
+
+const clientBuildDir2 = join(parentDir, 'client', 'build', 'index.html');
+
+console.log("pathFind", clientBuildDir2);
 
 
 if (process.env.NODE_ENV === 'production') {
-    // Set the static folder to serve the frontend build
-    app.use(express.static(path.join(__dirname, 'client', 'build')));
+    // Serve the frontend build files
+    app.use(express.static(clientBuildDir));
 
     // Serve the frontend's index.html for all other routes
     app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+        res.sendFile(path.join(clientBuildDir2));
     });
 }
 
