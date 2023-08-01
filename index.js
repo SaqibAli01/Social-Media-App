@@ -42,11 +42,18 @@ app.use("/uploads", express.static("uploads"));
 if (process.env.NODE_ENV === 'production') {
     // Serve the frontend build files
     app.use(express.static(path.join(process.cwd(), 'client', 'build')));
+
     // Serve the frontend's index.html for all other routes
     app.get('*', (req, res) => {
         res.sendFile(path.join(process.cwd(), 'client', 'build', 'index.html'));
     });
 }
+
+
+
+
+
+
 // if (process.env.NODE_ENV === "production") {
 //     app.get("/", (req, res) => {
 //       app.use(express.static(path.resolve(__dirname, "frontend", "build")));
