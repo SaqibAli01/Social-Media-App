@@ -8,8 +8,8 @@ import user from './routes/userRoutes.js';
 import post from './routes/postRoutes.js';
 import comments from './routes/commentRoutes.js';
 import likes from './routes/likeRoutes.js';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+// import { fileURLToPath } from 'url';
+// import { dirname, join } from 'path';
 
 //______App.js end_____________
 
@@ -32,22 +32,20 @@ app.use(user);
 app.use(post);
 app.use(comments);
 app.use(likes);
+app.use((req, res) => {
+    res.status(200).json({ message: "Success!" });
+})
 
 //multer //image frontend
 app.use("/uploads", express.static("uploads"));
 //frontend connect 
-// app.use(express.static(path.join(path.resolve(), "static")));
+app.use(express.static(path.join(path.resolve(), "static")));
+
 //______end app.js ____
 
 //frontend connect
 
 
-const __filename = fileURLToPath(import.meta.url);
-const currentDir = dirname(__filename);
-const parentDir = dirname(currentDir);
-const clientBuildDir = join(parentDir, 'client', 'build', 'index.html');
-
-const clientBuildDir2 = join(parentDir, 'client', 'public', 'index.html');
 
 
 
@@ -68,12 +66,16 @@ const clientBuildDir2 = join(parentDir, 'client', 'public', 'index.html');
 
 
 
-app.use(express.static(clientBuildDir));
+//         const __filename = fileURLToPath(import.meta.url);
+//         const currentDir = dirname(__filename);
+//         const parentDir = dirname(currentDir);
+//         const clientBuildDir = join(parentDir, 'client', 'build', 'index.html');
+//         const clientBuildDir2 = join(parentDir, 'client', 'public', 'index.html');
+// app.use(express.static(clientBuildDir));
 
-// Serve the frontend's index.html for all other routes
-app.get('*', (req, res) => {
-    res.sendFile(clientBuildDir2);
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(clientBuildDir2);
+// });
 
 
 
