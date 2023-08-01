@@ -2,9 +2,10 @@
 import database from "./config/database.js"
 //_________App.js_________
 import express from "express";
+
 import cors from 'cors';
 import path from "path";
-import user from './routes/userRoutes.js';
+// import user from './routes/userRoutes.js';
 import post from './routes/postRoutes.js';
 import comments from './routes/commentRoutes.js';
 import likes from './routes/likeRoutes.js';
@@ -17,6 +18,9 @@ import likes from './routes/likeRoutes.js';
 
 //call to config file 
 import { config } from 'dotenv';
+import signUp, { forgotPassword, logout, resendOtpNo, resendVerificationCode, resetPassword, updatePassword, updateProfile, updateUserInfo, userAuth, userLogin, verifyCode, verifyCodePhoneNo } from "./controllers/userController.js";
+import { upload } from "./middleware/multer.js";
+import { verifyLoginUser } from "./middleware/auth.js";
 config();
 
 //call to database
@@ -28,13 +32,32 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use(user);
+// app.use(user);
 app.use(post);
 app.use(comments);
 app.use(likes);
-app.use((req, res) => {
-    res.status(200).json({ message: "Success!" });
-})
+//________________________________________________________________
+
+const router = express.Router();
+router.post('/api/v1/signup', upload.single('avatar'), signUp);
+
+router.post('/api/v1/verify', verifyCode);
+router.post('/api/v1/resend-verification', resendVerificationCode);
+router.post('/api/v1/isVerify', verifyLoginUser, verifyCodePhoneNo);
+router.post('/api/v1/re-send-Otp', verifyLoginUser, resendOtpNo);
+router.post('/api/v1/login', userLogin);
+router.post("/api/v1/forgotPassword", forgotPassword)
+router.post('/api/v1/password/reset/:token', resetPassword);
+router.get('/api/v1/auth', verifyLoginUser, userAuth);
+router.put('/api/v1/update/password', verifyLoginUser, updatePassword);
+router.put('/api/v1/updateProfile', upload.single('avatar'), verifyLoginUser, updateProfile);
+router.put('/api/v1/updateUserInfo', verifyLoginUser, updateUserInfo);
+router.get('/api/v1/logout', verifyLoginUser, logout);
+//________________________________________________________________
+
+// app.use((req, res) => {
+//     res.status(200).json({ message: "Success!" });
+// })
 
 //multer //image frontend
 app.use("/uploads", express.static("uploads"));
