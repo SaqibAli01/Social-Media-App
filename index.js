@@ -52,17 +52,28 @@ const clientBuildDir2 = join(parentDir, 'client', 'build', 'index.html');
 console.log("pathFind", clientBuildDir);
 
 
-if (process.env.NODE_ENV === 'production') {
-    // Serve the frontend build files
-    app.use(express.static(clientBuildDir2));
+// if (process.env.NODE_ENV === 'production') {
+//     // Serve the frontend build files
+//     app.use(express.static(clientBuildDir2));
 
-    // Serve the frontend's index.html for all other routes
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(clientBuildDir2));
-    });
-}
+//     // Serve the frontend's index.html for all other routes
+//     app.get('*', (req, res) => {
+//         res.sendFile(path.join(clientBuildDir2));
+//     });
+// }
+
+const currentFilePath = fileURLToPath(import.meta.url);
+const currentDirs = dirname(currentFilePath);
 
 
+
+
+app.use(express.static(join(currentDirs, 'public')));
+
+// Serve the frontend's index.html for all other routes
+app.get('*', (req, res) => {
+    res.sendFile(join(currentDirs, 'public', 'index.html'));
+});
 
 
 
