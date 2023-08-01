@@ -1,6 +1,5 @@
-import app from "./App.js";
 import database from "./config/database.js";
-// import app from './App.js'; // Assuming 'App.js' exports the 'app' instance
+import app from './App.js'; // Assuming 'App.js' exports the 'app' instance
 
 // Call to config file
 import { config } from 'dotenv';
