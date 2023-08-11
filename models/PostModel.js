@@ -4,7 +4,9 @@ const postSchema = new Schema({
     // text: { type: String, required: true },
     text: { type: String },
     file: { type: String },
-    author: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    fileUrl: { type: String },
+    fileName: { type: String },
+    author: { type: Schema.Types.ObjectId, ref: "User" },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     createdAt: {

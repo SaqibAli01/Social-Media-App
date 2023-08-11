@@ -18,6 +18,7 @@ const userSchema = new Schema({
         trim: true,
         lowercase: true,
     },
+    newEmail: { type: String, default: null },
     password: {
         type: String,
         required: true,
@@ -65,23 +66,39 @@ const userSchema = new Schema({
         unique: true,
     },
 
-    // No verification
-    isVerified: {
-        type: Boolean,
-        default: false,
-    },
-    isVerificationCode: {
+    //  status
+    StatusRequest: {
         type: String,
-        default: null,
+        default: "Add Friend",
     },
-    isVerificationCodeExpiresAt: {
-        type: Date,
-        default: null,
+
+    StatusAccept: {
+        type: String,
+        default: "Accept Request",
     },
+
+
+    // isVerificationCode: {
+    //     type: String,
+    //     default: null,
+    // },
+    // isVerificationCodeExpiresAt: {
+    //     type: Date,
+    //     default: null,
+    // },
+
+    //newEmail updates the email
+    newEmailVerified: {
+        type: Boolean,
+        default: true,
+    },
+    author: { type: Schema.Types.ObjectId, ref: "User" },
+
 
 
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+
 
 });
 

@@ -4,15 +4,36 @@ import User from "../models/userModel.js";
 //-------------------- Create a new post --------------------------
 export const createPost = async (req, res) => {
     try {
+
         const { text } = req.body;
+
+        let file = null;
+        let fileUrl = null; //DOWNLOAD_URL
+        let fileName = null; //DOWNLOAD_NAME
+        const baseUrl = "http://localhost:8000"
+        if (req.file && req.file.path) {
+            file = req.file.path;
+            fileUrl = `${baseUrl}/${file}`;
+            fileName = req.file.originalname;
+        }
 
         const post = new Post({
             text,
-            file: req.file.path,
+            file,
+            fileUrl,
+            fileName,
             author: req.user._id,
         });
 
         const savedPost = await post.save();
+
+        // const post = new Post({
+        //     text,
+        //     file: req.file.path,
+        //     author: req.user._id,
+        // });
+
+        // const savedPost = await post.save();
 
         // res.status(200).json(savedPost);
         res.status(200).json({ message: 'Post created successfully', savedPost });
@@ -92,10 +113,12 @@ export const getAllPosts = async (req, res) => {
 
 
 //----------------------------- Get USER Data-----------------------------------
+
 export const getUserPosts = async (req, res) => {
     try {
         const { userId } = req.params;
 
+        // Make sure userId is a valid ObjectId or handle validation appropriately
 
         const posts = await Post.find({ author: userId })
             .populate({
@@ -119,13 +142,13 @@ export const getUserPosts = async (req, res) => {
                 ],
             });
 
-
         res.status(200).json(posts);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "An error occurred while retrieving posts." });
     }
 };
+
 
 //----------------------------- Get Single Post-----------------------------------
 export const getSinglePost = async (req, res) => {
@@ -174,11 +197,11 @@ export const deletePost = async (req, res) => {
     try {
         // const postId = req.params._id;
         const { postId } = req.params;
-        console.log(" deletePost ~ postId:---", postId)
+
 
         // Find the post by ID and check if it belongs to the authenticated user
         const post = await Post.findOneAndDelete({ _id: postId, author: req.user._id });
-        console.log("🚀 ~ deletePost ~ post:", post)
+
 
         if (!post) {
             return res.status(404).json(
@@ -230,7 +253,6 @@ export const sharePost = async (req, res) => {
         // Find the post by its ID
         const post = await Post.findById(postId);
         const link = postId
-        console.log("🚀 ~ file: postController.js:232 ~ sharePost ~ post:", post)
         if (!post) {
             return res.status(404).json({ error: "Post not found" });
         }

@@ -39,8 +39,8 @@ const signUp = async (req, res) => {
         const verificationCodeExpiresAt = new Date(Date.now() + 120000); // 120,000 milliseconds = 2 minute (adjust as needed)
 
         // Generate a verification code for phone number
-        const isVerificationCode = generateVerificationCode();
-        const isVerificationCodeExpiresAt = new Date(Date.now() + 120000); // 900,000 milliseconds = 15 minute (adjust as needed)
+        // const isVerificationCode = generateVerificationCode();
+        // const isVerificationCodeExpiresAt = new Date(Date.now() + 120000); // 900,000 milliseconds = 15 minute (adjust as needed)
 
 
         // console.log('verificationCode', verificationCode);
@@ -57,9 +57,9 @@ const signUp = async (req, res) => {
             verified: false, //for email
             verificationCode,
             verificationCodeExpiresAt,
-            isVerified: false, //for Phone No
-            isVerificationCode,
-            isVerificationCodeExpiresAt,
+            // isVerified: false, //for Phone No
+            // isVerificationCode,
+            // isVerificationCodeExpiresAt,
         });
         // console.log('newUser', newUser);
         await newUser.save();
@@ -67,11 +67,11 @@ const signUp = async (req, res) => {
         // Send the verification code to the user's email
         // console.log('email, verificationCode', email, verificationCode);
         await sendVerificationCode(email, verificationCode);
-        await sendOTPNo(phoneNumber, isVerificationCode)
+        // await sendOTPNo(phoneNumber, isVerificationCode)
 
         return res.status(201).json({
             success: true,
-            message: "User created successfully. Please verify your Phone No.",
+            message: "User created successfully. Please verify your Email.",
             email,
         });
     }
@@ -86,13 +86,12 @@ export default signUp;
 
 export const verifyCode = async (req, res) => {
     try {
-        console.log('req.body', req.body)
+
         const { email, verificationCode } = req.body;
 
         // const user = await User.findOne({ email });
         const user = await User.findOne({ verificationCode });
-        console.log('verificationCode', verificationCode);
-        console.log('user.verificationCode', user?.verificationCode);
+
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -125,7 +124,7 @@ export const resendVerificationCode = async (req, res) => {
         const { email } = req.body;
 
         const user = await User.findOne({ email });
-        console.log("🚀 ~ Resend user:", user)
+
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -139,7 +138,7 @@ export const resendVerificationCode = async (req, res) => {
         if (user.verificationCodeExpiresAt && user.verificationCodeExpiresAt < new Date()) {
             // Generate a new verification code
             const verificationCode = generateVerificationCode();
-            console.log('New verificationCode', verificationCode);
+
 
             // Update the user's verification code and expiration time in the database
             user.verificationCode = verificationCode;
@@ -166,32 +165,31 @@ export const resendVerificationCode = async (req, res) => {
 export const verifyCodePhoneNo = async (req, res) => {
     try {
         const { phoneNumber, isVerificationCode } = req.body;
-        console.log('isVerificationCode', isVerificationCode)
+
 
         // const user = await User.findOne({ email });
         const user = await User.findOne({ isVerificationCode });
-        console.log('isVerificationCode', isVerificationCode);
-        console.log('user.isVerificationCode', user?.isVerificationCode);
+
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         // Check if the verification code has expired
-        if (user.isVerificationCodeExpiresAt < new Date()) {
-            return res.status(400).json({ message: 'Verification code has expired' });
-        }
+        // if (user.isVerificationCodeExpiresAt < new Date()) {
+        //     return res.status(400).json({ message: 'Verification code has expired' });
+        // }
 
-        if (user.isVerificationCode === isVerificationCode) {
-            // Update the user's record to mark it as verified
-            await User.findByIdAndUpdate(user._id, { isVerified: true });
-            user.isVerificationCode = undefined;
-            user.isVerificationCodeExpiresAt = undefined;
-            await user.save();
-            return res.status(200).json({ message: 'Verification successful' });
-        } else {
-            return res.status(400).json({ message: 'Invalid verification code' });
-        }
+        // if (user.isVerificationCode === isVerificationCode) {
+        //     // Update the user's record to mark it as verified
+        //     await User.findByIdAndUpdate(user._id, { isVerified: true });
+        //     user.isVerificationCode = undefined;
+        //     user.isVerificationCodeExpiresAt = undefined;
+        //     await user.save();
+        //     return res.status(200).json({ message: 'Verification successful' });
+        // } else {
+        //     return res.status(400).json({ message: 'Invalid verification code' });
+        // }
     } catch (error) {
         console.error('Error in verifyCode:', error);
         return res.status(500).json({ message: 'Internal server error' });
@@ -202,11 +200,10 @@ export const verifyCodePhoneNo = async (req, res) => {
 export const resendOtpNo = async (req, res) => {
     try {
         const { email, phoneNumber } = req.body;
-        console.log('email', email);
-        console.log('phoneNumber', phoneNumber);
+
 
         const user = await User.findOne({ email });
-        console.log('user', user);
+
 
 
         if (!user) {
@@ -221,13 +218,13 @@ export const resendOtpNo = async (req, res) => {
         if (user.isVerificationCodeExpiresAt && user.isVerificationCodeExpiresAt < new Date()) {
 
             const isVerificationCode = generateVerificationCode();
-            console.log('New isVerificationCode', isVerificationCode);
+
 
 
             // Update the user's verification code and expiration time in the database
-            user.isVerificationCode = isVerificationCode;
-            user.isVerificationCodeExpiresAt = new Date(Date.now() + 120000) // 900000 milliseconds = 15 minutes (adjust as needed)
-            await user.save();
+            // user.isVerificationCode = isVerificationCode;
+            // user.isVerificationCodeExpiresAt = new Date(Date.now() + 120000) // 900000 milliseconds = 15 minutes (adjust as needed)
+            // await user.save();
 
             // Send the new verification code to the user's phone number
             await sendVerificationCode(phoneNumber, isVerificationCode);
@@ -245,46 +242,6 @@ export const resendOtpNo = async (req, res) => {
 
 
 
-// const signUp = async (req, res) => {
-//     try {
-//         const { firstName, lastName, email, password, dob, gender } = req.body;
-
-
-//         const existingUser = await User.findOne({ email });
-
-//         if (existingUser) {
-//             return res.status(409).json({ message: 'Email is already registered' });
-//         }
-
-//         if (!req.file) {
-//             return res.status(400).json({ message: 'Please upload your image' });
-//         }
-
-//         const avatarPath = req.file.path;
-//         const encPassword = await bcrypt.hash(password, 12);
-
-//         const newUser = new User({
-//             firstName,
-//             lastName,
-//             email,
-//             password: encPassword,
-//             dob,
-//             gender,
-//             avatar: avatarPath,
-//         });
-
-//         await newUser.save();
-
-//         return res.status(201).json({ message: 'User created successfully' });
-//     } catch (error) {
-//         console.error('Error in signUp:', error);
-//         return res.status(500).json({ message: 'Internal server error' });
-//     }
-// }
-// export default signUp;
-
-
-// ___________________________Login________________________
 
 export const userLogin = async (req, res) => {
     try {
@@ -303,8 +260,9 @@ export const userLogin = async (req, res) => {
         }
 
         if (!user.verified) {
-            return res.status(401).json({ message: "Account not verified. Please verify your email first." });
+            return res.status(403).json({ message: "Account not verified. Please verify your email first." });
         }
+
         // if (!user.phoneNumber || !user.isVerified) {
         //     return res.status(401).json({ message: "Account not verified. Please verify your PhoneNo first." });
         //     // await res.status(201).json({ message: "Account not verified. Please verify your PhoneNo first." });
@@ -426,18 +384,9 @@ export const userAuth = (req, res) => {
 export const updatePassword = async (req, res, next) => {
     try {
         const user = await User.findById(req.user._id);
-        console.log('user update', user);
-        console.log('req.body', req.body)
-        console.log("req.body.oldPassword", req.body.oldPassword)
-        console.log("user.password", user.password)
 
         const isPasswordMatched = await bcrypt.compare(req.body.oldPassword, user.password,);
-        // const isPasswordMatched = await bcrypt.compare(
-        //     req.body.oldPassword.toString(),
-        //     user.password.toString()
-        // );
 
-        console.log('isPasswordMatched', isPasswordMatched)
 
         if (!isPasswordMatched) {
             return res.status(404).json({ message: 'Old password is incorrect' });
@@ -465,7 +414,7 @@ export const updateProfile = async (req, res) => {
     try {
         // Find the user by ID
         const userId = req.user.id;
-        console.log(" updateProfile ~ userId:", userId)
+
 
         const user = await User.findById(userId);
 
@@ -477,7 +426,6 @@ export const updateProfile = async (req, res) => {
         if (req.file) {
             user.avatar = req.file.path;
         }
-        console.log(" updateProfile ~ req.file:", req.file)
 
         // Save the updated user to the database
         await user.save();
@@ -493,37 +441,211 @@ export const updateProfile = async (req, res) => {
 
 export const updateUserInfo = async (req, res) => {
     try {
-        const { firstName, lastName, dob, gender, phoneNumber } = req.body;
-
-        // Find the user by ID
+        const { firstName, lastName, dob, gender, phoneNumber, email } = req.body;
         const userId = req.user.id;
         const user = await User.findById(userId);
+
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
+        }
+
+
+        if (user.email !== email) {
+
+            const verificationCode = generateVerificationCode();
+            const verificationCodeExpiresAt = new Date(Date.now() + 120000);
+            user.newEmail = email;
+            user.newEmailVerified = false;
+            user.verificationCode = verificationCode;
+            user.verificationCodeExpiresAt = verificationCodeExpiresAt;
+            await sendVerificationCode(email, verificationCode);
+        } else {
+            user.newEmail = null;
+            user.verificationCode = null;
+            user.verificationCodeExpiresAt = null;
         }
 
         // Update the user's firstName, lastName, dob, and gender
         user.firstName = firstName;
         user.lastName = lastName;
         user.phoneNumber = phoneNumber;
-        user.email = email;
         user.dob = dob;
         user.gender = gender;
 
-
-        // Save the updated user to the database
         await user.save();
 
-        res.status(200).json({ message: 'User Info updated successfully' });
+        res.status(201).json({ message: 'User Info updated successfully' });
     } catch (error) {
         console.error('Error in update user info:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
 
+
+
+export const verifyEmail = async (req, res) => {
+
+
+    try {
+        const { userId, verificationCode } = req.body;
+
+
+        // Find the user by ID
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Check if the verification code matches the one stored in the user document
+        if (user.verificationCode === verificationCode) {
+
+            user.email = user.newEmail;
+            user.newEmail = null;
+            user.verificationCode = null;
+            user.verificationCodeExpiresAt = null;
+            user.newEmailVerified = true;
+            await user.save();
+
+            return res.status(200).json({ message: 'Email verified successfully' });
+        } else {
+            return res.status(401).json({ message: 'Invalid verification code' });
+        }
+    } catch (error) {
+        console.error('Error verifying email:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+
+
+// export const updateUserInfo = async (req, res) => {
+//     try {
+//         const { firstName, lastName, dob, gender, phoneNumber, email } = req.body;
+//         const userId = req.user.id;
+//         const user = await User.findById(userId);
+
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         if (user.email !== email) {
+//             const verificationCode = generateVerificationCode();
+//             const verificationCodeExpiresAt = new Date(Date.now() + 120000);
+
+//             // Update the user's email and other fields
+//             user.email = email;
+//             user.verified = false;
+//             user.verificationCode = verificationCode;
+//             user.verificationCodeExpiresAt = verificationCodeExpiresAt;
+
+//             // Send the verification code email
+//             await sendVerificationCode(email, verificationCode);
+//         } else {
+//             // Update other fields without sending a new verification code
+//             user.firstName = firstName;
+//             user.lastName = lastName;
+//             user.phoneNumber = phoneNumber;
+//             user.dob = dob;
+//             user.gender = gender;
+//         }
+
+//         await user.save();
+
+//         res.status(201).json({ message: 'User Info updated successfully' });
+//     } catch (error) {
+//         console.error('Error in update user info:', error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// };
+// export const verifyEmail = async (req, res) => {
+//     console.log("first verification");
+
+//     try {
+//         const { userId, verificationCode } = req.body;
+//         console.log("first userId", userId);
+//         console.log("first verification", verificationCode);
+
+//         // Find the user by ID
+//         const user = await User.findById(verificationCode);
+//         console.log("user verification", user.verificationCode);
+//         console.log("user", user);
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         // Check if the verification code matches the one stored in the user document
+//         if (user.verificationCode === verificationCode) {
+//             console.log("Verify True")
+//             // user.email = user.newEmail;
+//             // user.newEmail = null;
+//             user.verificationCode = null;
+//             user.verificationCodeExpiresAt = null;
+//             user.verified = true;
+//             await user.save();
+
+//             return res.status(200).json({ message: 'Email verified successfully' });
+//         } else {
+//             return res.status(401).json({ message: 'Invalid verification code' });
+//         }
+//     } catch (error) {
+//         console.error('Error verifying email:', error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// };
+
+// export const verifyEmail = async (req, res) => {
+//     console.log("first verification",)
+
+//     try {
+//         const { userId, verificationCode } = req.body;
+//         console.log("first verification", verificationCode)
+//         // Find the user by ID
+//         const user = await User.findById(verificationCode);
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         // Check if the verification code matches the one stored in the user document
+//         if (user.verificationCode === verificationCode) {
+//             // Update the email with the new email and mark it as verified
+//             user.email = user.newEmail;
+//             user.newEmail = null;
+//             user.verificationCode = null;
+//             user.verificationCodeExpiresAt = null;
+//             user.newEmailVerified = true;
+//             await user.save();
+
+//             return res.status(200).json({ message: 'Email verified successfully' });
+//         } else {
+//             return res.status(401).json({ message: 'Invalid verification code' });
+//         }
+//     } catch (error) {
+//         console.error('Error verifying email:', error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// };
+
 // ___________________________Logout________________________
 
 export const logout = (req, res) => {
     res.clearCookie('token'); // Clear the token cookie
     res.status(200).json({ message: 'Logged out successfully' });
+};
+
+//get all user
+export const getAllUser = async (req, res) => {
+    try {
+        const users = await User.find()
+            .populate({
+                path: "author",
+                select: ["firstName", "lastName", "avatar"],
+            });
+
+        res.status(200).json(users);
+    } catch (error) {
+        console.log('error', error)
+        res.status(500).json({ message: "An error occurred while retrieving users." });
+    }
 };
