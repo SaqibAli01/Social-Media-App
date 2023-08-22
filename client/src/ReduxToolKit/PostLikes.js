@@ -41,7 +41,6 @@ const postLikeSlice = createSlice({
                 if (likedPostIndex !== -1) {
                     state.posts[likedPostIndex] = action.payload;
                 }
-
                 toast.success(action?.payload?.message);
             })
             .addCase(likePost.rejected, (state, action) => {

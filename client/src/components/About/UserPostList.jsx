@@ -35,11 +35,6 @@ const UserPostList = () => {
 
   const postData = useSelector((state) => state?.user?.user?.user);
   const [userId, setUserId] = useState();
-  // useEffect(() => {
-  //   setUserId(postData?._id);
-  //   dispatch(getUserPosts(userId));
-  //   setLoggedInUserId(data?._id);
-  // }, [postData, data, dispatch]);
 
   useEffect(() => {
     setUserId(postData?._id);
@@ -174,6 +169,8 @@ const UserPostList = () => {
     toast.success(postId);
     // toast.success(userId)
   };
+
+  const userPosts = [...posts].filter((post) => post?.author?._id === userId);
   return (
     <>
       <Loading isLoading={loadings} />
@@ -181,7 +178,7 @@ const UserPostList = () => {
       <Box>
         <Button onClick={GetMyPost}>All Post</Button>
 
-        {[...posts].reverse().map((post) => (
+        {userPosts.reverse().map((post) => (
           <Box key={post?._id}>
             <Box
               sx={{

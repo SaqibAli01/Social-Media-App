@@ -270,7 +270,7 @@ export const userLogin = async (req, res) => {
 
         const token = generateToken(email);
 
-        res.status(200).json({ message: 'User signed in successfully . Please verify your PhoneNo first.', token, user });
+        res.status(200).json({ message: 'User signed in successfully .', token, user });
 
     } catch (error) {
         console.error('Error in signIn User:', error);

@@ -480,7 +480,7 @@ const userSlice = createSlice({
             .addCase(authenticateUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload;
-                toast.success(action?.payload?.message);
+                // toast.success(action?.payload?.message);
             })
             .addCase(authenticateUser.rejected, (state, action) => {
                 state.loading = false;

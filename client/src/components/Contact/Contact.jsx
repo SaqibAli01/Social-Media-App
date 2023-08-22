@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import FriendList from "../Home/FriendList";
 
 const useStyles = makeStyles((theme) => ({
   receivedRequests: {
@@ -41,23 +42,24 @@ const Contact = () => {
   const data = useSelector((state) => state?.user?.user?.user);
   const userId = data?._id;
 
-  // useEffect(() => {
-  //   // Update the user ID state
-  //   setUId(userId);
+  useEffect(() => {
+    // Update the user ID state
+    setUId(userId);
+    console.log("userId", userId);
+    const fetchRequestedUsers = async () => {
+      try {
+        const response = await axios.post(
+          `http://localhost:8000/getFriendShip/${userId}`
+        );
+        console.log("response.data", response.data);
+        setAllFriends(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  //   const fetchRequestedUsers = async () => {
-  //     try {
-  //       const response = await axios.post(
-  //         `http://localhost:8000/getFriendShip/${userId}`
-  //       );
-  //       setAllFriends(response.data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchRequestedUsers();
-  // }, [userId]);
+    fetchRequestedUsers();
+  }, [userId]);
 
   const imgUrl = "http://localhost:8000/";
 
@@ -94,7 +96,7 @@ const Contact = () => {
 
             <Box>
               <List>
-                {allFriends.length > 0 ? ( // Check if there are pending friend requests
+                {allFriends.length > 0 ? (
                   allFriends?.map((request) => (
                     <ListItem key={request?._id} className={classes?.listItem}>
                       <ListItemAvatar>
@@ -109,9 +111,6 @@ const Contact = () => {
                       <Button variant="contained" color="primary">
                         Friend
                       </Button>
-                      {/* <Button variant="outlined" color="secondary">
-                Reject
-              </Button> */}
                     </ListItem>
                   ))
                 ) : (
@@ -121,6 +120,7 @@ const Contact = () => {
             </Box>
           </Box>
         </Box>
+        {/* <FriendList /> */}
       </Container>
     </>
   );

@@ -96,7 +96,7 @@ const Home = () => {
     // formData.append("file",selectedFile)
 
     dispatch(createPost({ text, file }));
-
+    setSelectedFile("");
     setTimeout(() => {
       setTextValue("");
       setImage(null);
@@ -243,8 +243,8 @@ const Home = () => {
                         <div>
                           <h4>Selected File:</h4>
                           <p>Name: {file.name}</p>
-                          <p>Type: {file.type}</p>
-                          <p>Size: {file.size} bytes</p>
+                          {/* <p>Type: {file.type}</p>
+                          <p>Size: {file.size} bytes</p> */}
                         </div>
                       )}
                     </div>

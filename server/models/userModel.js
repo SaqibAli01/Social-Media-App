@@ -2,6 +2,29 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
+const userStatusSchema = new Schema({
+    requesterId: {
+        type: String,
+        default: "Add Friend",
+    },
+    receiverId: {
+        type: String,
+        default: "",
+    },
+    sendRequestStatus: {
+        type: String,
+        default: "pending",
+    },
+    acceptRequestStatus: {
+        type: String,
+        default: "pending",
+    },
+    status: {
+        type: String,
+        default: "Add Friend",
+    }
+});
+
 const userSchema = new Schema({
     firstName: {
         type: String,
@@ -65,17 +88,18 @@ const userSchema = new Schema({
         required: true,
         unique: true,
     },
-
-    //  status
-    StatusRequest: {
+    // Use the statusArray 
+    // status: [new Schema({
+    //     name: String,
+    //     type: String,
+    //     default: String,
+    // })],
+    statusChecked: {
         type: String,
         default: "Add Friend",
     },
+    status: [userStatusSchema],
 
-    StatusAccept: {
-        type: String,
-        default: "Accept Request",
-    },
 
 
     // isVerificationCode: {

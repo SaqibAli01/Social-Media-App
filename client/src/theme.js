@@ -27,8 +27,8 @@ const themeObj = {
             btnBg: '#efefef',
             navBtn: 'black',
             boxShadow: "rgba(0, 0, 0, 0.56) 0px 22px 70px 4px",
-            NavShadow: "rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset",
-
+            // NavShadow: "rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset",
+            NavShadow: " rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;"
 
         },
     },
@@ -55,7 +55,8 @@ const themeObj = {
 
             navBtn: 'white',
             boxShadow: "rgba(192,192,192) 0px 22px 70px 4px",
-            NavShadow: "0px 2px 4px rgba(192, 192, 192), 0px 7px 13px -3px rgba(192, 192, 191), 0px -3px 0px inset rgba(192, 192, 190)",
+            // NavShadow: "0px 2px 4px rgba(192, 192, 192), 0px 7px 13px -3px rgba(192, 192, 191), 0px -3px 0px inset rgba(192, 192, 190)",
+            NavShadow: " rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;"
 
 
         },

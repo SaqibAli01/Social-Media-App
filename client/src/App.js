@@ -33,6 +33,7 @@ import { Interval } from "./components/interval/Interval";
 
 
 
+
 function App() {
   const dispatch = useDispatch();
 
@@ -56,17 +57,27 @@ function App() {
   //   dispatch(authenticateUser());
   // }, [dispatch]);
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const token = localStorage.getItem("token");
+  // console.log('token', token)
+  // useEffect(() => {
+  //   dispatch(authenticateUser());
+  //   if (token) {
+  //     setIsAuthenticated(true);
+  //   } else {
+  //     setIsAuthenticated(false);
+  //   }
+  // }, []);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const data = useSelector((state) => state?.user?.user?.user);
+
+
+
 
   useEffect(() => {
-    dispatch(authenticateUser());
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
-  }, []);
+    setIsAuthenticated(data?._id);
+  }, [data]);
+
 
 
   const onClinkHandler = () => {
@@ -108,6 +119,7 @@ function App() {
 
           {/* <Route path="/" element={<Home />} /> */}
           <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
+
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
 

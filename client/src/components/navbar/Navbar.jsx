@@ -9,12 +9,12 @@ const Navbar = ({ themeToggler, mode }) => {
   return (
     <Box
       sx={{
-        // position: "fixed",
         // top: 0,
+        // position: "fixed",
+        // border: "1px solid red",
         width: "100%",
         boxShadow: theme.palette.background.NavShadow,
         zIndex: 1000,
-        // border: "1px solid red",
         background: theme.palette.background.hard,
       }}
     >

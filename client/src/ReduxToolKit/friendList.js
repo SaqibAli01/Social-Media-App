@@ -190,12 +190,12 @@ const allUserSlice = createSlice({
             .addCase(getRequestedUsers.fulfilled, (state, action) => {
                 state.loading = false;
                 state.friendRequests = action?.payload;
-                toast.success(action?.payload?.message);
+                // toast.success(action?.payload?.message);
             })
             .addCase(getRequestedUsers.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload?.message;
-                toast.error(action.payload?.message);
+                // toast.error(action.payload?.message);
             })
 
             //--------------------status check request --------------------
@@ -207,12 +207,12 @@ const allUserSlice = createSlice({
             .addCase(statusCheckRequest.fulfilled, (state, action) => {
                 state.loading = false;
                 state.statusCheckRequest = action?.payload;
-                toast.success(action?.payload?.message);
+                // toast.success(action?.payload?.message);
             })
             .addCase(statusCheckRequest.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload?.message;
-                toast.error(action.payload?.message);
+                // toast.error(action.payload?.message);
             });
 
 

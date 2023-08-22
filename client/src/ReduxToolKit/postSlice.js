@@ -213,12 +213,12 @@ const postSlice = createSlice({
             .addCase(fetchSinglePost.fulfilled, (state, action) => {
                 state.loading = false;
                 state.singlePost = action.payload;
-                toast.success(action?.payload?.message)
+                // toast.success(action?.payload?.message)
             })
             .addCase(fetchSinglePost.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-                toast.error(action?.error?.message)
+                // toast.error(action?.error?.message)
             });
     },
 });

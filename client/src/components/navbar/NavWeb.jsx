@@ -2,7 +2,14 @@ import { Avatar, Box, Button, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
-// import logo from "../../images/logo.png";
+import logo from "../../images/facebook.png";
+import HomeIcon from "@mui/icons-material/Home";
+import GroupIcon from "@mui/icons-material/Group";
+import PersonIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ViewTimelineIcon from "@mui/icons-material/ViewTimeline";
+import LoginIcon from "@mui/icons-material/Login";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 
 //theme
 
@@ -40,18 +47,18 @@ const NavWeb = ({ themeToggler, mode }) => {
   // };
   const array = data
     ? [
-        { name: "Home", link1: "/" },
-        { name: "About", link1: "/about" },
-        { name: "Friend", link1: "/contact" },
-        { name: "Profile", link1: "/profile" },
-        { name: "Logout", link1: "/logout" },
+        { name: "Home", link1: "/", icon: <HomeIcon /> },
+        { name: "About", link1: "/about", icon: <ViewTimelineIcon /> },
+        { name: "Friend", link1: "/contact", icon: <GroupIcon /> },
+        { name: "Profile", link1: "/profile", icon: <PersonIcon /> },
+        { name: "Logout", link1: "/logout", icon: <LogoutIcon /> },
       ]
     : [
-        { name: "Home", link1: "/" },
-        { name: "About", link1: "/about" },
-        { name: "Friend", link1: "/contact" },
-        { name: "Login", link1: "/login" },
-        { name: "Sign Up", link1: "/signup" },
+        { name: "Home", link1: "/", icon: <HomeIcon /> },
+        { name: "About", link1: "/about", icon: <ViewTimelineIcon /> },
+        { name: "Friend", link1: "/contact", icon: <GroupIcon /> },
+        { name: "Login", link1: "/login", icon: <LoginIcon /> },
+        { name: "Sign Up", link1: "/signup", icon: <AppRegistrationIcon /> },
       ];
 
   // const MyThemeComponent = styled('div')(({ theme }) => ({
@@ -66,7 +73,10 @@ const NavWeb = ({ themeToggler, mode }) => {
       FontFamily: "Poppins",
       textDecoration: "none",
       textTransform: "uppercase",
-      padding: "10px 20px",
+      // padding: "10px 20px",
+      padding: "12px 12px",
+
+      // borderRadius: "50%",
       borderRadius: "5px",
       fontSize: isActive ? "30px" : "20px",
       // color: isActive ? "#FEFEFE" : "#242323",
@@ -111,7 +121,8 @@ const NavWeb = ({ themeToggler, mode }) => {
           >
             {/* <img
               src={logo}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ width: "40px", height: "40px", objectFit: "cover" }}
+              alt="logo"
             /> */}
             {/* <FacebookIcon /> */}
 
@@ -122,22 +133,33 @@ const NavWeb = ({ themeToggler, mode }) => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                gap: 4,
+                gap: 2,
               }}
             >
-              <Typography
+              <img
+                src={logo}
+                style={{ width: "40px", height: "40px", objectFit: "cover" }}
+                alt="logo"
+              />
+              {/* <Typography
                 sx={{
                   fontSize: { md: "36px", sm: "30px", xs: "30px" },
                   fontWeight: "bold",
                 }}
               >
                 {data ? `${name}` : "Logo"}
-              </Typography>
+              </Typography> */}
               <SearchBar />
             </Box>
           </Box>
 
-          <Box sx={{ display: "flex", height: "40px", gap: "20px" }}>
+          <Box
+            sx={{
+              display: "flex",
+              height: "40px",
+              gap: "20px",
+            }}
+          >
             {array.map((item, index) => {
               return (
                 <NavLink to={item.link1} style={styledactivelink} key={index}>
@@ -149,6 +171,13 @@ const NavWeb = ({ themeToggler, mode }) => {
                       alignItems: "center",
                     }}
                   >
+                    {/* <Avatar
+                      sx={{
+                        color: theme.palette.background.navBtn,
+                      }}
+                    >
+                      {item.icon}
+                    </Avatar> */}
                     <Typography
                       sx={{
                         fontFamily: "Poppins",
@@ -163,9 +192,46 @@ const NavWeb = ({ themeToggler, mode }) => {
               );
             })}
             <Box>
-              <Avatar alt="Remy Sharp" src={`${imageUrl}${imgAvatar}`} />
+              {/* <Avatar alt="Remy Sharp" src={`${imageUrl}${imgAvatar}`} /> */}
             </Box>
-            <Box>
+          </Box>
+
+          <Box
+          // sx={{
+          //   display: "flex",
+          //   justifyContent: "center",
+          //   alignItems: "center",
+          //   gap: 2,
+          // }}
+          >
+            {/* <img
+              src={logo}
+              style={{ width: "40px", height: "40px", objectFit: "cover" }}
+              alt="logo"
+            /> */}
+            {/* <FacebookIcon /> */}
+
+            {/* <Avatar alt="" src={`${imageUrl}${imgAvatar}`} /> */}
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              <Avatar alt="Remy Sharp" src={`${imageUrl}${imgAvatar}`} />
+
+              <Typography
+                sx={{
+                  fontSize: { md: "36px", sm: "30px", xs: "30px" },
+                  fontWeight: "bold",
+                }}
+              >
+                {data ? `${name}` : "Logo"}
+              </Typography>
+
               <Button sx={{ ml: 2 }} onClick={themeToggler} color="inherit">
                 {mode ? <Brightness7 /> : <Brightness4 />}
               </Button>
