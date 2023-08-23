@@ -12,9 +12,9 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import axios from "axios";
-import FriendList from "../Home/FriendList";
+// import FriendList from "../Home/FriendList";
 
 const useStyles = makeStyles((theme) => ({
   receivedRequests: {
@@ -33,25 +33,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Contact = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const classes = useStyles();
   const [allFriends, setAllFriends] = useState([]);
-  const [uId, setUId] = useState(null);
+  // const [uId, setUId] = useState(null);
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const data = useSelector((state) => state?.user?.user?.user);
   const userId = data?._id;
 
   useEffect(() => {
-    // Update the user ID state
-    setUId(userId);
-    console.log("userId", userId);
     const fetchRequestedUsers = async () => {
       try {
         const response = await axios.post(
           `http://localhost:8000/getFriendShip/${userId}`
         );
-        console.log("response.data", response.data);
+        setLoading(true);
+        // console.log("response.data", response.data);
+        setLoading(false);
         setAllFriends(response.data);
       } catch (error) {
         console.log(error);

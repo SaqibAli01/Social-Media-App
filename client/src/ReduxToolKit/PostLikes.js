@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 export const likePost = createAsyncThunk(
     'post/likePost',
     async (postId) => {
-        console.log("postId", postId)
+        // console.log("postId", postId)
         const token = localStorage.getItem("token");
         try {
             const headers = {

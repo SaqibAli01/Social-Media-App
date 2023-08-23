@@ -9,7 +9,7 @@ import {
   ListItemText,
 } from "@mui/material";
 
-import DeleteIcon from "@mui/icons-material/Delete";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
 import {
   cancelFriendRequest,
@@ -47,7 +47,7 @@ const FriendList = () => {
   const friendRequests = friendRequestsState?.friendRequests || [];
 
   const [userId, setUserId] = useState(data?._id);
-  const [sentRequests, setSentRequests] = useState([]);
+  // const [sentRequests, setSentRequests] = useState([]);
 
   useEffect(() => {
     dispatch(getAllUser());
@@ -118,17 +118,14 @@ const FriendList = () => {
 
             const pendingRequest = friend?.status?.find(
               (item) =>
-                console.log("item, item", item) ||
-                (item?.requesterId === userId &&
-                  item?.sendRequestStatus === "pending")
+                item?.requesterId === userId &&
+                item?.sendRequestStatus === "pending"
             );
 
             const acceptedRequest = friend?.status?.find(
               (item) =>
-                console.log("item, item", item) ||
-                ((item?.receiverId === userId ||
-                  item?.requesterId === userId) &&
-                  item?.acceptRequestStatus === "accepted")
+                (item?.receiverId === userId || item?.requesterId === userId) &&
+                item?.acceptRequestStatus === "accepted"
             );
 
             return (
@@ -142,7 +139,7 @@ const FriendList = () => {
                 <ListItemText
                   primary={`${friend?.firstName} ${friend?.lastName}`}
                 />
-                {console.log("pendingRequest", pendingRequest)}
+
                 {pendingRequest ? (
                   <Button
                     variant="contained"
@@ -181,67 +178,9 @@ const FriendList = () => {
         )}
       </List>
 
-      {/* <List>
-        {users ? (
-          users?.map((friend) => {
-            // console.log("friend", friend);
-            const isCurrentUser = friend?._id === userId;
-            if (isCurrentUser) {
-              return null;
-            }
-
-            return (
-              <ListItem key={friend?._id} className={classes?.listItem}>
-                <ListItemAvatar>
-                  <Avatar
-                    src={`${imgUrl}${friend?.avatar}`}
-                    alt={friend?.name}
-                  />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={`${friend?.firstName} ${friend?.lastName}`}
-                />
-
-                <Button
-                  variant="contained"
-                  onClick={() => handleSendRequest(friend?._id)}
-                >
-                  Add Friend
-                </Button>
-                {friend?.status?.map((item, index) => (
-                  <div key={index}>
-                    {userId === item?.requesterId &&
-                      item?.sendRequestStatus === "pending" && (
-                        <Button
-                          variant="contained"
-                          onClick={() => handleCancelRequest(friend?._id)}
-                        >
-                          <DeleteIcon />
-                        </Button>
-                      )}
-
-                    {userId === item?.receiverId &&
-                      item?.acceptRequestStatus === "accepted" && (
-                        <Button
-                          variant="contained"
-                          onClick={() => handleAcceptRequest(friend?._id)}
-                        >
-                          Friend
-                        </Button>
-                      )}
-                  </div>
-                ))}
-              </ListItem>
-            );
-          })
-        ) : (
-          <p>Loading users...</p>
-        )}
-      </List> */}
-
-      <Button onClick={() => dispatch(statusCheckRequest(userId))}>
+      {/* <Button onClick={() => dispatch(statusCheckRequest(userId))}>
         Check Status
-      </Button>
+      </Button> */}
     </div>
   );
 };

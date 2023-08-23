@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 //_______________theme_______________
 import { responsiveFontSizes } from '@mui/material/styles';
-import { Box, Button, CssBaseline, ThemeProvider, } from '@mui/material';
+import { Box, CssBaseline, ThemeProvider, } from '@mui/material';
 import { createCustomTheme } from './theme';
 //_______________ end theme_______________
 import Login from "./components/user/Login";
@@ -15,8 +15,8 @@ import Navbar from "./components/navbar/Navbar";
 import Profile from "./components/user/Profile";
 import UpdatePassword from "./components/user/UpdatePassword";
 import UserUpdatesInfo from "./components/user/UserUpdatesInfo";
-import { useDispatch, useSelector } from "react-redux";
-import { authenticateUser } from "./ReduxToolKit/userSlice";
+import { useSelector } from "react-redux";
+// import { authenticateUser } from "./ReduxToolKit/userSlice";
 import Loading from "./components/Loader/Loading";
 import Logout from "./components/user/Logout";
 import Home from "./components/Home/Home";
@@ -27,7 +27,9 @@ import Contact from "./components/Contact/Contact";
 import SinglePost from "./components/Home/SinglePost";
 
 import VerificationForm from "./components/user/UpdateEmailVerify";
-import { Interval } from "./components/interval/Interval";
+// import { Interval } from "./components/interval/Interval";
+import CreateGroup from "./components/Home/CreateGroup";
+import GroupPost from "./components/Home/GroupPost";
 // import ReSendVerifyCode from "./components/user/ReSendVerifyCode";
 // import Footer from "./components/Footer/Footer";
 
@@ -35,7 +37,7 @@ import { Interval } from "./components/interval/Interval";
 
 
 function App() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
 
   //_______________theme_______________
@@ -75,17 +77,19 @@ function App() {
 
 
   useEffect(() => {
+    setLoading(true);
     setIsAuthenticated(data?._id);
+    setLoading(false);
   }, [data]);
 
 
 
-  const onClinkHandler = () => {
-    setLoading(true);
-    dispatch(authenticateUser());
-    setLoading(false);
+  // const onClinkHandler = () => {
+  //   setLoading(true);
+  //   dispatch(authenticateUser());
+  //   setLoading(false);
 
-  }
+  // }
 
 
   // _______________Loading State________________
@@ -94,7 +98,7 @@ function App() {
   return (
     <>
       <Loading isLoading={loading} />
-      <Interval />
+      {/* <Interval /> */}
       {/* //_______________theme_______________ */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -139,6 +143,8 @@ function App() {
           <Route path="/contact" element={isAuthenticated ? <Contact /> : <Navigate to="/login" />} />
           <Route path="/singlePost/:postId" element={<SinglePost />} />
           <Route path="/VerificationForm/:userId" element={<VerificationForm />} />
+          <Route path="/createGroup" element={<CreateGroup />} />
+          <Route path="/GroupPost" element={<GroupPost />} />
 
 
         </Routes>

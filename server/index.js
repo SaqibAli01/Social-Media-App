@@ -9,6 +9,7 @@ import post from './routes/postRoutes.js';
 import comments from './routes/commentRoutes.js';
 import likes from './routes/likeRoutes.js';
 import request from './routes/requestRouter.js';
+import group from './routes/groupRoutes.js';
 
 
 // import { fileURLToPath } from 'url';
@@ -36,6 +37,7 @@ app.use(post);
 app.use(comments);
 app.use(likes);
 app.use(request)
+app.use(group)
 
 
 //multer //image frontend

@@ -22,7 +22,7 @@ export const sendFriendRequest = createAsyncThunk(
         try {
             // console.log("🚀 userData:", userData);
             const response = await axios.post(`http://localhost:8000/send-request`, userData);
-            console.log('response?.data', response?.data);
+
             return response.data;
         } catch (error) {
             console.log(error);
@@ -36,9 +36,9 @@ export const cancelFriendRequest = createAsyncThunk(
     'user/cancelFriendRequest',
     async (userData, { rejectWithValue }) => {
         try {
-            console.log("🚀 userData:", userData);
+
             const response = await axios.post(`http://localhost:8000/request-cancel`, userData);
-            console.log('response?.data', response?.data);
+            // console.log('response?.data', response?.data);
             return response.data;
         } catch (error) {
             console.log(error);
@@ -55,7 +55,7 @@ export const acceptFriendRequest = createAsyncThunk(
         try {
 
             const response = await axios.post(`http://localhost:8000/acceptRequest`, userData);
-            console.log('response?.data', response?.data);
+            // console.log('response?.data', response?.data);
             return response.data;
         } catch (error) {
             console.log(error);
@@ -73,7 +73,7 @@ export const getRequestedUsers = createAsyncThunk(
         try {
 
             const response = await axios.post(`http://localhost:8000/request${userId}`);
-            console.log('response?.data', response?.data);
+            // console.log('response?.data', response?.data);
             return response.data;
         } catch (error) {
             console.log(error);
@@ -86,11 +86,11 @@ export const getRequestedUsers = createAsyncThunk(
 export const statusCheckRequest = createAsyncThunk(
     'user/statusCheckRequest',
     async (userId, { rejectWithValue }) => {
-        console.log("-----User: " + userId)
+        // console.log("-----User: " + userId)
         try {
 
             const response = await axios.get(`http://localhost:8000/status/${userId}`);
-            console.log('response?.data', response?.data);
+            // console.log('response?.data', response?.data);
             return response.data;
         } catch (error) {
             console.log(error);

@@ -52,7 +52,6 @@ const VerificationCode = () => {
   const location = useLocation();
 
   const setSendEmail = location?.state?.reSendEmail;
-  console.log("🚀 ~ file reSendEmail:", reSendEmail);
 
   useEffect(() => {
     setRdSendEmail(setSendEmail);

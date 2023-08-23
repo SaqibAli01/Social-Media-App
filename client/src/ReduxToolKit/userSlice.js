@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 export const signup = createAsyncThunk('user/signup', async (userData) => {
     try {
         const response = await axios.post('http://localhost:8000/api/v1/signup', userData);
-        console.log("response.data", response, userData)
+        // console.log("response.data", response, userData)
         return response.data;
     } catch (error) {
         throw error.response.data;
@@ -16,11 +16,11 @@ export const signup = createAsyncThunk('user/signup', async (userData) => {
 
 // ______________________Create async thunk for verification ________________________________
 export const verification = createAsyncThunk('user/verification', async (userData) => {
-    console.log("🚀 ~ user Slice:", userData)
+    // console.log("🚀 ~ user Slice:", userData)
     const myData = { "verificationCode": userData }
     try {
         const response = await axios.post('http://localhost:8000/api/v1/verify', myData);
-        console.log("response.data", response, userData)
+        // console.log("response.data", response, userData)
         return response.data;
     } catch (error) {
         throw error.response.data;
@@ -35,7 +35,7 @@ export const login = createAsyncThunk('user/login', async (data) => {
         const response = await axios.post('http://localhost:8000/api/v1/login', data);
         const { token } = response.data
 
-        console.log('response.data', response.data?.status)
+        // console.log('response.data', response.data?.status)
         localStorage.setItem("token", token);
         // Invoke the callback function if it is provided
         return response.data;
@@ -75,7 +75,7 @@ export const resetPassword = createAsyncThunk(
                 `http://localhost:8000/api/v1/password/reset/${token}`,
                 data
             );
-            console.log("response.data", response.data)
+            // console.log("response.data", response.data)
             return response.data;
         } catch (error) {
             throw error.response.data;
@@ -88,7 +88,7 @@ export const resetPassword = createAsyncThunk(
 export const updateProfile = createAsyncThunk(
     'user/updateProfile',
     async (userData) => {
-        console.log('userData', userData)
+        // console.log('userData', userData)
         try {
             const token = localStorage.getItem('token');
             const headers = {
@@ -108,7 +108,7 @@ export const updateProfile = createAsyncThunk(
 export const updatePassword = createAsyncThunk(
     'user/updatePassword',
     async (passwordData, { rejectWithValue }) => {
-        console.log('passwordData', passwordData)
+        // console.log('passwordData', passwordData)
         try {
             const token = localStorage.getItem('token');
             const headers = {
@@ -167,7 +167,7 @@ export const authenticateUser = createAsyncThunk(
                 "http://localhost:8000/api/v1/auth",
                 { headers }
             );
-            console.log("response.data", response?.data);
+            // console.log("response.data", response?.data);
             return response.data;
         } catch (error) {
             throw error.response.data;
@@ -201,11 +201,11 @@ export const logout = createAsyncThunk('user/logout', async () => {
 export const resendVerificationCode = createAsyncThunk(
     'verification/resendVerificationCode',
     async (email) => {
-        console.log('email', email)
+        // console.log('email', email)
         try {
 
             const response = await axios.post('http://localhost:8000/api/v1/resend-verification', { email });
-            console.log('response', response)
+            // console.log('response', response)
             return response.data;
         } catch (error) {
             throw error;
@@ -238,12 +238,12 @@ export const sendOtpNo = createAsyncThunk(
 export const verifyUpdateNewEmail = createAsyncThunk(
     "user/verifyUpdateNewEmail",
     async (data) => {
-        console.log('data-------', data)
+        // console.log('data-------', data)
         try {
             const token = localStorage.getItem("token");
             const headers = { token: token };
             const response = await axios.post("http://localhost:8000/api/v1/verifyEmail", data, { headers });
-            console.log("response.data", response?.data);
+            // console.log("response.data", response?.data);
             return response.data;
         } catch (error) {
             throw error.response.data;
@@ -256,7 +256,7 @@ export const verifyUpdateNewEmail = createAsyncThunk(
 export const reSendOtpNo = createAsyncThunk(
     "user/reSendOtpNo",
     async (data) => {
-        console.log('data-------', data)
+        // console.log('data-------', data)
         try {
             const token = localStorage.getItem("token");
             const headers = {
@@ -267,7 +267,7 @@ export const reSendOtpNo = createAsyncThunk(
                 data,
                 { headers }
             );
-            console.log("response.data", response?.data);
+            // console.log("response.data", response?.data);
             return response.data;
         } catch (error) {
             throw error.response.data;
@@ -354,7 +354,7 @@ const userSlice = createSlice({
                 state.isAuthenticated = false;
                 state.error = action.error.message;
                 // const statusCode = action?.error?.message?.status;
-                console.log(" state.error", state?.error)
+                // console.log(" state.error", state?.error)
                 // console.log(" action.error.message", statusCode)
                 toast.error(action?.error?.message);
                 let statusCode = action?.error?.response?.status;

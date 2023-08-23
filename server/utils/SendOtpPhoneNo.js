@@ -9,7 +9,7 @@ const client = new Twilio(accountSid, authToken);
 
 
 export const sendOTPNo = async (phoneNumber, otp) => {
-    console.log('phoneNumber, otp', phoneNumber, otp)
+    // console.log('phoneNumber, otp', phoneNumber, otp)
     try {
         await client.messages.create({
             body: `Your OTP is: ${otp}`,

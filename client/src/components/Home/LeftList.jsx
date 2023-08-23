@@ -12,23 +12,56 @@ import PeopleIcon from "@mui/icons-material/People";
 import GamesIcon from "@mui/icons-material/Games";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Box, ListItemText } from "@mui/material";
-import { useSelector } from "react-redux";
+import { Box, ListItemText, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
+import { getUserCreateGroup } from "../../ReduxToolKit/groupSlice";
+import { toast } from "react-toastify";
 
 const LeftSidebar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [name, setName] = useState();
   const [lName, setLName] = useState();
   const [imgAvatar, setImgAvatar] = useState();
+  const [userId, setUserId] = useState();
+
+  const [groups, setGroup] = useState([]);
 
   const data = useSelector((state) => state?.user?.user?.user);
-
+  const { group } = useSelector((state) => state?.group);
   useEffect(() => {
+    setUserId(data?._id);
     setName(data?.firstName);
     setLName(data?.lastName);
     setImgAvatar(data?.avatar);
+    setGroup(group?.groups);
+    dispatch(getUserCreateGroup(userId));
   }, [data]);
 
   const imageUrl = "http://localhost:8000/";
+
+  const [grpShown, setGrpShown] = useState(false);
+
+  const handleShowGroup = () => {
+    dispatch(getUserCreateGroup(userId));
+    setGrpShown(!grpShown);
+  };
+
+  const handleNavigateGroup = () => {
+    navigate("/createGroup");
+  };
+
+  const handleNavigateGroupPost = (id) => {
+    toast.success(id);
+    navigate("/GroupPost");
+  };
+
+  const handleClickFriend = () => {
+    navigate("/contact");
+  };
 
   return (
     <>
@@ -61,7 +94,7 @@ const LeftSidebar = () => {
         </List>
         <Divider />
         <List>
-          <ListItem button>
+          <ListItem button onClick={handleClickFriend}>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
@@ -73,12 +106,56 @@ const LeftSidebar = () => {
             </ListItemIcon>
             Videos
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={handleShowGroup}>
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
             Groups
           </ListItem>
+          {grpShown && (
+            <Box>
+              <Typography
+                sx={{
+                  // textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                Groups You Manage
+              </Typography>
+              {groups?.map((item, index) => (
+                <ListItem
+                  button
+                  onClick={() => handleNavigateGroupPost(item._id)}
+                  key={item._id}
+                  sx={{
+                    width: "90%",
+                  }}
+                >
+                  <ListItemIcon>
+                    <GroupsIcon />
+                  </ListItemIcon>
+
+                  {item?.name}
+                </ListItem>
+              ))}
+
+              <ListItem
+                button
+                onClick={handleNavigateGroup}
+                sx={{
+                  color: "#1877F2",
+                  backgroundColor: "#E7F3FF",
+                  width: "90%",
+                }}
+              >
+                <ListItemIcon>
+                  <AddIcon />
+                </ListItemIcon>
+                Create Group
+              </ListItem>
+            </Box>
+          )}
+
           <ListItem button>
             <ListItemIcon>
               <GamesIcon />

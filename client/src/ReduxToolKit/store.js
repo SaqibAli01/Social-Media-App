@@ -5,6 +5,7 @@ import likeReducer from './PostLikes';
 import commentSlice from './commentSlice';
 import searchReducer from './searchReducer'
 import friendReducer from './friendList'
+import groupReducer from './groupSlice'
 
 
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
         comment: commentSlice,
         search: searchReducer,
         friend: friendReducer,
+        group: groupReducer,
 
     },
 });

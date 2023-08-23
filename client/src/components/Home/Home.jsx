@@ -140,11 +140,10 @@ const Home = () => {
               <Box
                 sx={{
                   display: "flex",
-                  // alignItems: "center",
+
                   justifyContent: "center",
                   flexDirection: "column",
                   gap: 3,
-                  // border: "1px solid red",
                 }}
               >
                 <Box
@@ -212,7 +211,6 @@ const Home = () => {
                       {fileType === "pdf" && (
                         <embed src={filePreview} width="200px" height="200px" />
                       )}
-                      {/* You can add more cases for other file types if needed */}
                       <br />
                       <Button onClick={handleClearImage}>Clear Image</Button>
                     </Box>

@@ -480,6 +480,7 @@ const PostList = () => {
                 {post.comments.map((comment) => {
                   return (
                     <Stack
+                      key={comment?._id}
                       direction="row"
                       spacing={2}
                       justifyContent={"space-between"}

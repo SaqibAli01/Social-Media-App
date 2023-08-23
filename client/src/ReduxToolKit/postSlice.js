@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 export const createPost = createAsyncThunk(
     'post/createPost',
     async ({ text, file }) => {
-        console.log('text, file', text, file)
+        // console.log('text, file', text, file)
         const token = localStorage.getItem("token");
         try {
             const headers = {
@@ -26,7 +26,7 @@ export const createPost = createAsyncThunk(
                 { headers }
             );
 
-            console.log("response.data", response.data)
+            // console.log("response.data", response.data)
             return response.data;
         } catch (error) {
             throw error.response.data;
@@ -53,14 +53,14 @@ export const getAllPosts = createAsyncThunk(
 export const getUserPosts = createAsyncThunk(
     'post/getUserPosts',
     async (userId) => {
-        console.log("userId", userId)
+        // console.log("userId", userId)
         const token = localStorage.getItem("token");
         try {
             const headers = {
                 token: token,
             };
             const response = await axios.get(`http://localhost:8000/api/v1/user-posts/${userId}`, { headers });
-            console.log('response.data single user', response.data)
+            // console.log('response.data single user', response.data)
             return response.data;
         } catch (error) {
             throw new Error(error.response.data.error);
@@ -84,7 +84,7 @@ export const deletePost = createAsyncThunk(
                 token: token,
             };
             const response = await axios.delete(`http://localhost:8000/api/v1/delete/${postId}`, { headers });
-            console.log('response.data', response?.data)
+            // console.log('response.data', response?.data)
             return response.data;
         } catch (error) {
             throw new Error(error.response.data.error);
