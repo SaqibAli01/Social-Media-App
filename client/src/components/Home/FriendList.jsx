@@ -111,6 +111,8 @@ const FriendList = () => {
       <List>
         {users ? (
           users?.map((friend) => {
+            // friend?._id --- 64e5eac546e30b86f7b87d83 === 64e5ea4446e30b86f7b87d53
+            // console.log("friend?._id ---", friend?._id, "===", userId);
             const isCurrentUser = friend?._id === userId;
             if (isCurrentUser) {
               return null;

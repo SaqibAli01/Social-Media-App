@@ -8,11 +8,11 @@ const postGroupSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "User" },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  group: { type: Schema.Types.ObjectId, ref: "Group" },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  group: { type: Schema.Types.ObjectId, ref: "Group" },
 });
 
 export const PostGroup = model("PostGroup", postGroupSchema);

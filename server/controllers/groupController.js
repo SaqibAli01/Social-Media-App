@@ -28,10 +28,39 @@ export const getGroupsCreatedByUser = async (req, res) => {
         const userId = req.params.userId;
 
         const groups = await Group.find({ admin: userId });
-        console.log("🚀 ~ groupsd:", groups)
 
         res.status(200).json({ success: true, groups });
+
     } catch (error) {
         res.status(500).json({ success: false, message: "Error Group ", error: error.message });
+    }
+};
+
+
+//------------------------------------ Group Image Change --------------------------------
+export const groupProfileChange = async (req, res) => {
+    try {
+        const groupId = req.body.groupId;
+
+        const groupFind = await Group.findById(groupId);
+
+
+        if (!groupFind) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+
+        if (req.file) {
+            groupFind.avatar = req.file.path;
+        }
+
+        await groupFind.save();
+
+        res.status(200).json({ message: 'Profile updated successfully' });
+
+    } catch (error) {
+
+        console.error('An error occurred while updating group profile.', error);
+
+        res.status(500).json({ message: 'Failed to update group profile' });
     }
 };

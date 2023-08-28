@@ -9,7 +9,6 @@ router.post('/acceptRequest', acceptFriendRequest)
 router.post('/request-cancel', cancelFriendRequest);
 router.post('/request/:userId', getAllRequestedUsers);
 router.post('/getFriendShip/:userId', getAllFriendShip);
-
 router.get('/status/:userId', statusCheck);
 
 

@@ -364,7 +364,6 @@ const Profile = () => {
                     }}
                   >
                     <DialogActions>
-                      {/* <Button onClick={handleClose3}>Close</Button> */}
                       <Button onClick={handleClose3}>
                         <CloseIcon />
                       </Button>

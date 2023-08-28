@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import MemberAddGrp from "./MemberAddGrp";
 // import FriendList from "../Home/FriendList";
 
 const useStyles = makeStyles((theme) => ({
@@ -120,6 +121,7 @@ const Contact = () => {
           </Box>
         </Box>
         {/* <FriendList /> */}
+        {/* <MemberAddGrp /> */}
       </Container>
     </>
   );

@@ -30,7 +30,6 @@ const ResetPassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onSubmit = async (data) => {
-    // console.log("data---------", data);
     setLoading(true);
     // dispatch(resetPassword(data));
     const response = await dispatch(resetPassword(data));

@@ -25,6 +25,33 @@ const userStatusSchema = new Schema({
     }
 });
 
+const groupInviteSchema = new Schema({
+    senderUser: {
+        type: String,
+        default: "Add Member",
+    },
+    receiverUser: {
+        type: String,
+        default: "",
+    },
+    senderGroup: {
+        type: String,
+        default: "Add Member",
+    },
+    sendInviteStatus: {
+        type: String,
+        default: "pending",
+    },
+    acceptInviteStatus: {
+        type: String,
+        default: "pending",
+    },
+    status: {
+        type: String,
+        default: "Add Member",
+    }
+});
+
 const userSchema = new Schema({
     firstName: {
         type: String,
@@ -88,30 +115,18 @@ const userSchema = new Schema({
         required: true,
         unique: true,
     },
-    // Use the statusArray 
-    // status: [new Schema({
-    //     name: String,
-    //     type: String,
-    //     default: String,
-    // })],
+
     statusChecked: {
         type: String,
         default: "Add Friend",
     },
+    inviteStatus: {
+        type: String,
+        default: "Add Member",
+    },
     status: [userStatusSchema],
+    groupInvite: [groupInviteSchema],
 
-
-
-    // isVerificationCode: {
-    //     type: String,
-    //     default: null,
-    // },
-    // isVerificationCodeExpiresAt: {
-    //     type: Date,
-    //     default: null,
-    // },
-
-    //newEmail updates the email
     newEmailVerified: {
         type: Boolean,
         default: true,

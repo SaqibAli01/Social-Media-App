@@ -27,7 +27,7 @@ import Contact from "./components/Contact/Contact";
 import SinglePost from "./components/Home/SinglePost";
 
 import VerificationForm from "./components/user/UpdateEmailVerify";
-// import { Interval } from "./components/interval/Interval";
+import { Interval } from "./components/interval/Interval";
 import CreateGroup from "./components/Home/CreateGroup";
 import GroupPost from "./components/Home/GroupPost";
 // import ReSendVerifyCode from "./components/user/ReSendVerifyCode";
@@ -98,7 +98,7 @@ function App() {
   return (
     <>
       <Loading isLoading={loading} />
-      {/* <Interval /> */}
+      <Interval />
       {/* //_______________theme_______________ */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -144,7 +144,7 @@ function App() {
           <Route path="/singlePost/:postId" element={<SinglePost />} />
           <Route path="/VerificationForm/:userId" element={<VerificationForm />} />
           <Route path="/createGroup" element={<CreateGroup />} />
-          <Route path="/GroupPost" element={<GroupPost />} />
+          <Route path="/GroupPost/:id" element={<GroupPost />} />
 
 
         </Routes>

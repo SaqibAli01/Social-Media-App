@@ -10,26 +10,31 @@ import {
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { acceptFriendRequest, getAllUser } from "../../ReduxToolKit/friendList";
+import { AcceptGroupInvitation } from "../../ReduxToolKit/groupSlice";
 
-const ReceivedRequests = () => {
+const GroupRequestAccept = ({ id }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state?.user?.user?.user);
   // console.log("data", data);
   const [userId, setUserId] = useState(data?._id);
   const { users } = useSelector((state) => state?.friend);
-
+  // console.log("users", users);
   const imgUrl = "http://localhost:8000/";
 
   const handleAcceptRequest = (requestId) => {
-    alert(requestId);
+    // alert(requestId);
     // console.log("userId: " + userId);
     // console.log("Request Id: " + requestId);
-
     const data = {
-      requesterId: requestId,
+      senderId: requestId,
       receiverId: userId,
+      groupId: id,
     };
-    dispatch(acceptFriendRequest(data));
+    // const data1 = {
+    //   requesterId: requestId,
+    //   receiverId: userId,
+    // };
+    dispatch(AcceptGroupInvitation(data));
 
     setTimeout(() => {
       dispatch(getAllUser());
@@ -38,18 +43,19 @@ const ReceivedRequests = () => {
 
   return (
     <Box>
-      ReceivedRequests
+      Group Request Accept
       <Box>
         <List>
           {users ? (
             users.map((friend) => {
+              // console.log("friend", friend);
               const isCurrentUser = friend?._id === userId;
               if (isCurrentUser) {
                 return null;
               }
 
-              const filteredStatus = friend?.status?.filter(
-                (item) => item?.receiverId === userId
+              const filteredStatus = friend?.groupInvite?.filter(
+                (item) => item?.receiverUser === userId
               );
 
               if (filteredStatus.length === 0) {
@@ -70,16 +76,16 @@ const ReceivedRequests = () => {
 
                   {filteredStatus.map((item, index) => (
                     <div key={index}>
-                      {item?.acceptRequestStatus === "pending" && (
+                      {item?.acceptInviteStatus === "pending" && (
                         <Button
-                          variant="outlined"
+                          variant="gradient"
                           onClick={() => handleAcceptRequest(friend?._id)}
                         >
                           Accept
                         </Button>
                       )}
 
-                      {item?.acceptRequestStatus === "accepted" && (
+                      {item?.acceptInviteStatus === "accepted" && (
                         <Button
                           variant="contained"
                           onClick={() => handleAcceptRequest(friend?._id)}
@@ -101,32 +107,4 @@ const ReceivedRequests = () => {
   );
 };
 
-export default ReceivedRequests;
-
-// <h2>Received Friend Requests</h2>
-// <List>
-//   {requestedUsers ? (
-//     requestedUsers?.map((request) => (
-//       <ListItem key={request?._id} className={classes?.listItem}>
-//         <ListItemAvatar>
-//           <Avatar
-//             src={`${imgUrl}${request?.avatar}`}
-//             alt={request?.requester?.name}
-//           />
-//         </ListItemAvatar>
-//         <ListItemText
-//           primary={`${request?.firstName} ${request?.lastName}`}
-//         />
-//         <Button
-//           onClick={(e) => RequestAccpectHandler(request?._id)}
-//           variant="contained"
-//           color="primary"
-//         >
-//           Accept
-//         </Button>
-//       </ListItem>
-//     ))
-//   ) : (
-//     <p>No pending friend requests.</p>
-//   )}
-// </List>
+export default GroupRequestAccept;

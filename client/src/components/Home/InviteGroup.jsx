@@ -19,6 +19,11 @@ import {
   statusCheckRequest,
 } from "../../ReduxToolKit/friendList";
 import ReceivedRequests from "./ReceivedRequests";
+import {
+  CancelGroupInvitation,
+  getUserCreateGroup,
+  sendGroupInvitation,
+} from "../../ReduxToolKit/groupSlice";
 
 const useStyles = makeStyles((theme) => ({
   friendList: {
@@ -34,41 +39,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const InviteGroup = () => {
+const InviteGroup = ({ id }) => {
+  // console.log("my Id", id);
+  const groupId = id;
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const data = useSelector((state) => state?.user?.user?.user);
   const { users } = useSelector((state) => state?.friend);
-  // console.log("users", users);
-  const friendRequestsState = useSelector(
-    (state) => state?.friend?.statusCheckRequest
-  );
-  const friendRequests = friendRequestsState?.friendRequests || [];
+  // console.log("users-------", users);
 
   const [userId, setUserId] = useState(data?._id);
-  // const [sentRequests, setSentRequests] = useState([]);
+
+  // const [groups, setGroup] = useState([]);
+  const { group } = useSelector((state) => state?.group);
+  // console.log("~ group:", group);
 
   useEffect(() => {
+    // setGroup(group?.groups);
     dispatch(getAllUser());
     setUserId(data?._id);
-    dispatch(statusCheckRequest(userId));
-  }, [dispatch, data, userId]);
+    // dispatch(statusCheckRequest(userId));
+    dispatch(getUserCreateGroup(userId));
+  }, [dispatch, group, data, userId]);
 
   const handleSendRequest = (receiverId) => {
     const data = {
-      requesterId: userId,
+      senderId: userId,
       receiverId: receiverId,
+      groupId: id,
     };
 
-    dispatch(sendFriendRequest(data));
+    // console.log("Invite Member", data);
+    dispatch(sendGroupInvitation(data));
     setTimeout(() => {
       dispatch(getAllUser());
     }, 3000);
   };
 
   const handleCancelRequest = (receiverId) => {
-    dispatch(cancelFriendRequest({ requesterId: userId, receiverId }));
+    const data = {
+      senderId: userId,
+      receiverId: receiverId,
+      groupId: id,
+    };
+
+    dispatch(CancelGroupInvitation(data));
     setTimeout(() => {
       dispatch(getAllUser());
     }, 3000);
@@ -96,10 +112,6 @@ const InviteGroup = () => {
 
   const imgUrl = "http://localhost:8000/";
 
-  if (!friendRequests) {
-    return <p>Loading friend requests...</p>;
-  }
-
   return (
     <div className={classes.friendList}>
       {/* <ReceivedRequests /> */}
@@ -111,22 +123,31 @@ const InviteGroup = () => {
       <List>
         {users ? (
           users?.map((friend) => {
+            // console.log("friend", friend);
             const isCurrentUser = friend?._id === userId;
+            // console.log("friend?._id=== userId", friend?._id, "=== ", userId);
+
             if (isCurrentUser) {
               return null;
             }
 
-            const pendingRequest = friend?.status?.find(
+            const pendingRequest = friend?.groupInvite?.find(
               (item) =>
-                item?.requesterId === userId &&
-                item?.sendRequestStatus === "pending"
+                item?.senderUser === userId &&
+                item?.senderGroup === groupId &&
+                item?.sendInviteStatus === "pending"
             );
+            // console.log("pendingRequest", pendingRequest);
+            // item?.requesterId === userId &&
+            // item?.sendRequestStatus === "pending"
 
-            const acceptedRequest = friend?.status?.find(
+            const acceptedRequest = friend?.groupInvite?.find(
               (item) =>
-                (item?.receiverId === userId || item?.requesterId === userId) &&
-                item?.acceptRequestStatus === "accepted"
+                (item?.receiverUser === userId ||
+                  item?.senderUser === userId) &&
+                item?.acceptInviteStatus === "accepted"
             );
+            // console.log("acceptedRequest", acceptedRequest);
 
             return (
               <ListItem key={friend?._id} className={classes?.listItem}>
@@ -139,13 +160,13 @@ const InviteGroup = () => {
                 <ListItemText
                   primary={`${friend?.firstName} ${friend?.lastName}`}
                 />
-                {console.log("pendingRequest", pendingRequest)}
+                {/* {console.log("pendingRequest", pendingRequest)} */}
                 {pendingRequest ? (
                   <Button
                     variant="contained"
                     onClick={() => handleCancelRequest(friend?._id)}
                   >
-                    Cancel Request
+                    Cancel Invite
                   </Button>
                 ) : acceptedRequest ? (
                   // Friend request is accepted
@@ -156,7 +177,7 @@ const InviteGroup = () => {
                 isCurrentUser ? (
                   // Accept Request
                   <Button
-                    variant="contained"
+                    variant="gradient"
                     onClick={() => handleAcceptRequest(friend?._id)}
                   >
                     Accept Request
@@ -164,10 +185,10 @@ const InviteGroup = () => {
                 ) : (
                   // Show "Add Friend" button if there's no request sent
                   <Button
-                    variant="contained"
+                    variant="gradient"
                     onClick={() => handleSendRequest(friend?._id)}
                   >
-                    Add Friend
+                    Invite Member
                   </Button>
                 )}
               </ListItem>

@@ -14,6 +14,8 @@ const createGroupSchema = new Schema({
     enum: ["user", "admin"],
     default: ["admin"],
   },
+  fileUrl: { type: String },
+
 
   createdAt: {
     type: Date,
