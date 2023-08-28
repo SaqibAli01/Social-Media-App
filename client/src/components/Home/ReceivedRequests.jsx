@@ -22,7 +22,7 @@ const ReceivedRequests = () => {
 
   const handleAcceptRequest = (requestId) => {
     alert(requestId);
-    // console.log("userId: " + userId);
+    console.log("userId: " + userId);
     // console.log("Request Id: " + requestId);
 
     const data = {
