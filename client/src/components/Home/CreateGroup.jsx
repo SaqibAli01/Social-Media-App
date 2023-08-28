@@ -12,11 +12,13 @@ import {
   MenuItem,
   Select,
   Tab,
+  Tabs,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
+import PropTypes from "prop-types";
+
 import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -29,6 +31,39 @@ import GroupPost from "./GroupPost";
 import InviteGroup from "./InviteGroup";
 import { createGroup } from "../../ReduxToolKit/groupSlice";
 import Loading from "../Loader/Loading";
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
 
 const CreateGroup = () => {
   const theme = useTheme();
@@ -73,7 +108,13 @@ const CreateGroup = () => {
     // console.log("Group created:", groupName, privacy);
   };
 
-  const [value, setValue] = React.useState("1");
+  // const [value, setValue] = React.useState("1");
+
+  // const handleChange = (event, newValue) => {
+  //   setValue(newValue);
+  // };
+
+  const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -318,28 +359,48 @@ const CreateGroup = () => {
                 </Box>
                 <Divider sx={{ py: 1 }} />
 
-                <Box sx={{ width: "100%", typography: "body1", mt: 1 }}>
-                  <TabContext value={value}>
-                    {/* <Box sx={{ borderBottom: 1, borderColor: "divider" }}> */}
-                    <Box>
-                      <TabList
-                        onChange={handleChange}
-                        aria-label="lab API tabs example"
-                      >
-                        <Tab label="About" value="1" sx={{ ...tabStyles }} />
-                        <Tab label="Post" value="2" sx={{ ...tabStyles }} />
-                        <Tab label="Member" value="3" sx={{ ...tabStyles }} />
-                        <Tab label="Events" value="4" sx={{ ...tabStyles }} />
-                      </TabList>
-                    </Box>
-                    <TabPanel value="1">About</TabPanel>
-                    <TabPanel value="2">
-                      {/* <GroupPost /> */}
-                      Post
-                    </TabPanel>
-                    <TabPanel value="3">Member</TabPanel>
-                    <TabPanel value="4">Events</TabPanel>
-                  </TabContext>
+                <Box sx={{ width: "100%" }}>
+                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <Tabs
+                      value={value}
+                      onChange={handleChange}
+                      aria-label="basic tabs example"
+                    >
+                      <Tab
+                        label="About"
+                        {...a11yProps(0)}
+                        sx={{ ...tabStyles }}
+                      />
+                      <Tab
+                        label="Post"
+                        {...a11yProps(1)}
+                        sx={{ ...tabStyles }}
+                      />
+                      <Tab
+                        label="Member"
+                        {...a11yProps(2)}
+                        sx={{ ...tabStyles }}
+                      />
+                      <Tab
+                        label="Events"
+                        {...a11yProps(4)}
+                        sx={{ ...tabStyles }}
+                      />
+                    </Tabs>
+                  </Box>
+                  <CustomTabPanel value={value} index={0}>
+                    About
+                  </CustomTabPanel>
+                  <CustomTabPanel value={value} index={1}>
+                    {/* <GroupPost /> */}
+                    Post
+                  </CustomTabPanel>
+                  <CustomTabPanel value={value} index={2}>
+                    Member
+                  </CustomTabPanel>
+                  <CustomTabPanel value={value} index={4}>
+                    Events
+                  </CustomTabPanel>
                 </Box>
               </Box>
             </Box>

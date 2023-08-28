@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import Loading from "../Loader/Loading";
 import grpBg from "../../images/grpBackGround.PNG";
 import { useSelector } from "react-redux";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
+// import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Public } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 import axios from "axios";
 import InviteGroup from "./InviteGroup";
 import {
@@ -15,11 +16,45 @@ import {
   Container,
   Divider,
   Tab,
+  Tabs,
   Typography,
   useTheme,
 } from "@mui/material";
 import MemberAddGrp from "../Contact/MemberAddGrp";
 import GroupRequestAccept from "./GroupRequests";
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
 
 const tabStyles = {
   // border: "1px solid #0DF17F",
@@ -67,7 +102,7 @@ const GroupPost = () => {
   const groupName = userGroup?.name || "Default Group Name";
   const groupPrivacy = userGroup?.privacy || "Public";
 
-  const [value, setValue] = useState("1");
+  const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -259,32 +294,35 @@ const GroupPost = () => {
             </Box>
             <Divider sx={{ py: 1 }} />
 
-            <Box sx={{ width: "100%", typography: "body1", mt: 1 }}>
-              <TabContext value={value}>
-                {/* <Box sx={{ borderBottom: 1, borderColor: "divider" }}> */}
-                <Box>
-                  <TabList
-                    onChange={handleChange}
-                    aria-label="lab API tabs example"
-                  >
-                    <Tab label="About" value="1" sx={{ ...tabStyles }} />
-                    <Tab label="Post" value="2" sx={{ ...tabStyles }} />
-                    <Tab label="Member" value="3" sx={{ ...tabStyles }} />
-                    <Tab label="Events" value="4" sx={{ ...tabStyles }} />
-                  </TabList>
-                </Box>
-                <TabPanel value="1">About</TabPanel>
-                <TabPanel value="2">
-                  {/* <GroupPost /> */}
-                  Post
-                </TabPanel>
-                <TabPanel value="3">
-                  <MemberAddGrp />
-                  <GroupRequestAccept id={id} />
-                  <InviteGroup id={id} />
-                </TabPanel>
-                <TabPanel value="4">Events</TabPanel>
-              </TabContext>
+            <Box sx={{ width: "100%" }}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="basic tabs example"
+                >
+                  <Tab label="About" {...a11yProps(0)} sx={{ ...tabStyles }} />
+                  <Tab label="Post" {...a11yProps(1)} sx={{ ...tabStyles }} />
+                  <Tab label="Member" {...a11yProps(2)} sx={{ ...tabStyles }} />
+                  <Tab label="Events" {...a11yProps(3)} sx={{ ...tabStyles }} />
+                </Tabs>
+              </Box>
+              <CustomTabPanel value={value} index={0}>
+                About
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={1}>
+                {/* <GroupPost /> */}
+                Post
+              </CustomTabPanel>
+              <CustomTabPanel value={value} index={2}>
+                <MemberAddGrp />
+                <GroupRequestAccept id={id} />
+                <InviteGroup id={id} />
+              </CustomTabPanel>
+
+              <CustomTabPanel value={value} index={2}>
+                Events
+              </CustomTabPanel>
             </Box>
           </Box>
         </Box>
