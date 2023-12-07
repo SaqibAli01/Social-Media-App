@@ -316,7 +316,7 @@ const GroupPost = () => {
               </CustomTabPanel>
               <CustomTabPanel value={value} index={2}>
                 <MemberAddGrp />
-                <GroupRequestAccept id={id} />
+                {/* <GroupRequestAccept id={id} /> */}
                 <InviteGroup id={id} />
               </CustomTabPanel>
 

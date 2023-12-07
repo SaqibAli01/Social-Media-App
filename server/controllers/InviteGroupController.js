@@ -123,7 +123,7 @@ export const acceptInviteRequest = async (req, res) => {
     try {
 
         const { senderId, receiverId, groupId } = req.body;
-        console.log(" body:", req.body)
+
 
         const sender = await User.findById(senderId);
         const receiver = await User.findById(receiverId);
@@ -131,8 +131,17 @@ export const acceptInviteRequest = async (req, res) => {
 
 
         if (!sender || !receiver || !group) {
-            return res.status(404).json({ message: 'Sender, Receiver, or Group not found.' });
+            return res.status(404).json({ message: 'Sender  not found.' });
         }
+        if (!sender || !receiver || !group) {
+            return res.status(404).json({ message: ' Receiver not found.' });
+        }
+        if (!sender || !receiver || !group) {
+            return res.status(404).json({ message: ' Group not found.' });
+        }
+        // if (!sender || !receiver || !group) {
+        //     return res.status(404).json({ message: 'Sender, Receiver, or Group not found.' });
+        // }
 
         const existingRequest = await GroupInvitation.findOne({
             sender: senderId,
@@ -142,7 +151,7 @@ export const acceptInviteRequest = async (req, res) => {
         });
         console.log('existingRequest', existingRequest)
 
-        if (existingRequest) {
+        if (!existingRequest) {
             return res.status(400).json({ message: 'Invite request not found or already accepted.' });
         }
 
@@ -175,7 +184,7 @@ export const acceptInviteRequest = async (req, res) => {
             }
             return statusEntry;
         });
-        await requester.save();
+        await sender.save();
 
         receiver.groupInvite = receiver.groupInvite.map(statusEntry => {
             if (
@@ -284,7 +293,9 @@ export const getAllRequestedMember = async (req, res) => {
             const isSender = request.sender._id.toString() === userId;
             return {
                 user: isSender ? request.receiver : request.sender,
-                group: request.group
+                group: request.group,
+                receiver: isSender ? request.sender : request.receiver,
+
             };
         });
 

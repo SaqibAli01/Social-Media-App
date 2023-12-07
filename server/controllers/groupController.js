@@ -64,3 +64,20 @@ export const groupProfileChange = async (req, res) => {
         res.status(500).json({ message: 'Failed to update group profile' });
     }
 };
+
+//get all user
+export const getAllGroup = async (req, res) => {
+    try {
+        const group = await Group.find()
+            .populate({
+                path: "admin",
+                select: ["firstName", "lastName", "avatar"],
+            });
+        res.status(200).json(group);
+
+
+    } catch (error) {
+        console.log('error', error)
+        res.status(500).json({ message: "An error occurred while retrieving Group." });
+    }
+};

@@ -18,6 +18,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 import { getUserCreateGroup } from "../../ReduxToolKit/groupSlice";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
@@ -66,6 +67,22 @@ const LeftSidebar = () => {
   const handleClickFriend = () => {
     navigate("/contact");
   };
+
+  const [groups, setGroups] = useState([]);
+  console.log("🚀  groups:", groups);
+
+  useEffect(() => {
+    const url = "http://localhost:3000/get-All-groups";
+
+    axios
+      .get(url)
+      .then((response) => {
+        setGroups(response.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, []);
 
   return (
     <>

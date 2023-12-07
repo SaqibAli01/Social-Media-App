@@ -12,8 +12,10 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { AcceptGroupInvitation } from "../../ReduxToolKit/groupSlice";
+import { getAllUser } from "../../ReduxToolKit/friendList";
 
 const useStyles = makeStyles((theme) => ({
   // Your makeStyles definitions
@@ -21,14 +23,32 @@ const useStyles = makeStyles((theme) => ({
 
 const MemberAddGrp = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [allFriends, setAllFriends] = useState();
   const [userData, setUserData] = useState();
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const data = useSelector((state) => state?.user?.user?.user);
   const userId = data?._id;
+  // console.log("userId", userId);
 
   const { users } = useSelector((state) => state?.friend);
+
+  const handleAcceptRequestGroup = (item) => {
+    // console.log("group", item?._id);
+    const data = {
+      senderId: item?.admin,
+      receiverId: userId,
+      groupId: item?._id,
+    };
+    console.log("data", data);
+
+    dispatch(AcceptGroupInvitation(data));
+
+    setTimeout(() => {
+      dispatch(getAllUser());
+    }, 3000);
+  };
 
   const combinedData = [{ ...userData, ...allFriends }];
   useEffect(() => {
@@ -47,45 +67,15 @@ const MemberAddGrp = () => {
     };
 
     fetchRequestedUsers();
-  }, [userId]);
+  }, []);
 
   const imgUrl = "http://localhost:8000/";
 
-  // const renderUsers = (users) => (
-  //   <Box>
-  //     {users.map((friend) => {
-  //       // console.log("friend", friend?.groupInvite);
-  //       return (
-  //         <React.Fragment key={friend?._id}>
-  //           {friend?.groupInvite?.map((invite) => {
-  //             const senderUserId = invite?.senderUser;
-  //             const receiverUserId = invite?.receiverUser;
-  //             const senderGroupId = invite?.senderGroup;
-  //             const sendInviteStatus = invite?.sendInviteStatus;
-
-  //             // Now you can use senderUserId, receiverUserId, and senderGroupId as needed
-
-  //             return (
-  //               <div key={invite?._id}>
-  //                 SenderUser ID: {senderUserId} <br />
-  //                 ReceiverUser ID: {receiverUserId} <br />
-  //                 SenderGroup ID: {senderGroupId} <br />
-  //                 sendInviteStatus ID: {sendInviteStatus} <br />
-  //               </div>
-  //             );
-  //           })}
-  //         </React.Fragment>
-  //       );
-  //     })}
-  //   </Box>
-  // );
-  // (invite?.senderUser === request?.group?.admin &&
-  //   invite?.user?._id)
   const renderAllFriends = (allFriends) => (
     <Box>
       <List>
         {allFriends ? (
-          combinedData.map((invite, index) => {
+          allFriends.map((invite, index) => {
             console.log("invite", invite);
             return (
               <Box
@@ -118,9 +108,22 @@ const MemberAddGrp = () => {
                   <ListItemText
                     primary={`${invite?.user?.firstName} ${invite?.user?.lastName}`}
                   />
-                  <Button variant="contained" color="primary">
-                    Accept Invite
-                  </Button>
+
+                  {invite?.group?.admin === userId && (
+                    <Button variant="contained" color="primary">
+                      Send Invite
+                    </Button>
+                  )}
+
+                  {invite?.receiver?._id === userId && (
+                    <Button
+                      variant="gradient"
+                      color="primary"
+                      onClick={() => handleAcceptRequestGroup(invite?.group)}
+                    >
+                      Accept Invite
+                    </Button>
+                  )}
                 </ListItem>
               </Box>
             );
@@ -137,8 +140,7 @@ const MemberAddGrp = () => {
       <Loading isLoading={loading} />
       <Container>
         <Box>
-          Render the users
-          {/* Render the allFriends */}
+          All Groups
           {renderAllFriends(allFriends)}
         </Box>
       </Container>
@@ -162,50 +164,38 @@ export default MemberAddGrp;
 //   ListItemText,
 //   useTheme,
 // } from "@mui/material";
-// import { useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 // import axios from "axios";
-// // import FriendList from "../Home/FriendList";
+// import { getAllUser } from "../../ReduxToolKit/friendList";
+// import { AcceptGroupInvitation } from "../../ReduxToolKit/groupSlice";
 
 // const useStyles = makeStyles((theme) => ({
-//   receivedRequests: {
-//     width: "100%",
-//     padding: theme.spacing(2),
-//     borderLeft: `1px solid ${theme.palette.divider}`,
-//     display: "flex",
-//     flexDirection: "column",
-//   },
-//   listItem: {
-//     marginBottom: theme.spacing(2),
-//     background: theme.palette.background.btnBg,
-//     display: "flex",
-//     alignItems: "center", // Centering items vertically
-//   },
+//   // Your makeStyles definitions
 // }));
 
 // const MemberAddGrp = () => {
-//   // const dispatch = useDispatch();
 //   const classes = useStyles();
-//   const [allFriends, setAllFriends] = useState([]);
-//   // console.log("groupUser", groupUser);
-//   // const [uId, setUId] = useState(null);
+//   const dispatch = useDispatch();
+//   const [allFriends, setAllFriends] = useState();
+//   const [userData, setUserData] = useState();
+//   const [groupId, setGroupId] = useState();
 //   const [loading, setLoading] = useState(false);
 //   const theme = useTheme();
 //   const data = useSelector((state) => state?.user?.user?.user);
 //   const userId = data?._id;
-//   console.log("userId:", userId);
+//   // console.log("30 ~ MemberAddGrp ~ userId:", userId);
 
 //   const { users } = useSelector((state) => state?.friend);
 
-//   // const { users } = useSelector((state) => state?.friend);
-
+//   const combinedData = [{ ...userData, ...allFriends }];
 //   useEffect(() => {
+//     setUserData(users);
 //     const fetchRequestedUsers = async () => {
 //       try {
 //         const response = await axios.post(
 //           `http://localhost:8000/get-all-member/${userId}`
 //         );
 //         setLoading(true);
-//         // console.log("response.data Add Member", response.data);
 //         setLoading(false);
 //         setAllFriends(response.data);
 //       } catch (error) {
@@ -218,116 +208,191 @@ export default MemberAddGrp;
 
 //   const imgUrl = "http://localhost:8000/";
 
+//   // const renderUsers = (users) => (
+//   //   <Box>
+//   //     {users.map((friend) => {
+//   //       // console.log("friend", friend?.groupInvite);
+//   //       return (
+//   //         <React.Fragment key={friend?._id}>
+//   //           {friend?.groupInvite?.map((invite) => {
+//   //             const senderUserId = invite?.senderUser;
+//   //             const receiverUserId = invite?.receiverUser;
+//   //             const senderGroupId = invite?.senderGroup;
+//   //             const sendInviteStatus = invite?.sendInviteStatus;
+
+//   //             // Now you can use senderUserId, receiverUserId, and senderGroupId as needed
+
+//   //             return (
+//   //               <div key={invite?._id}>
+//   //                 SenderUser ID: {senderUserId} <br />
+//   //                 ReceiverUser ID: {receiverUserId} <br />
+//   //                 SenderGroup ID: {senderGroupId} <br />
+//   //                 sendInviteStatus ID: {sendInviteStatus} <br />
+//   //               </div>
+//   //             );
+//   //           })}
+//   //         </React.Fragment>
+//   //       );
+//   //     })}
+//   //   </Box>
+//   // );
+//   // (invite?.senderUser === request?.group?.admin &&
+//   //   invite?.user?._id)
+//   const handleAcceptRequestGroup = (receiverId) => {
+//     const data = {
+//       senderId: userId,
+//       receiverId: receiverId,
+//       groupId: groupId,
+//     };
+//     console.log("data", data);
+
+//     dispatch(AcceptGroupInvitation(data));
+
+//     setTimeout(() => {
+//       dispatch(getAllUser());
+//     }, 3000);
+//   };
+
+//   const allMemberList = (allFriends) => (
+//     <>
+//       <Box>
+//         <List
+//           sx={{
+//             background: theme.palette.background.btnBg,
+//             display: "flex",
+//             justifyContent: "center",
+//           }}
+//         >
+//           {combinedData?.map((invite, index) => (
+//             <Box key={index}>
+//               {Object.values(invite).map((item, innerIndex) => (
+//                 <Box key={innerIndex}>
+//                   {item.group && item.user && (
+//                     <Box
+//                       key={innerIndex}
+//                       sx={{
+//                         my: 1,
+//                         background: theme.palette.background.btnBg,
+//                       }}
+//                     >
+//                       <ListItem className={classes?.listItem}>
+//                         <ListItemText
+//                           sx={{
+//                             fontWeight: "bold",
+//                             fontSize: "16px",
+//                           }}
+//                           primary={`Groupe Name : ${item.group.name}`}
+//                         />
+//                       </ListItem>
+
+//                       <ListItem className={classes?.listItem}>
+//                         <ListItemAvatar>
+//                           <Avatar
+//                             src={`${imgUrl}${item.group.avatar}`}
+//                             alt={item.group.name}
+//                           />
+//                           {/* {setGroupId(item?.group?.name)} */}
+//                         </ListItemAvatar>
+//                         <ListItemText primary={item.group.name} />
+//                       </ListItem>
+
+//                       <Box sx={{ ml: 2, pb: 1, color: "#1976D2" }}>
+//                         Group Invite Accept
+//                       </Box>
+//                       <ListItem className={classes?.listItem}>
+//                         <ListItemAvatar>
+//                           <Avatar
+//                             src={`${imgUrl}${item.user.avatar}`}
+//                             alt={`${item.user.firstName} ${item.user.lastName}`}
+//                           />
+//                         </ListItemAvatar>
+//                         <ListItemText
+//                           primary={`${item.user.firstName} ${item.user.lastName}`}
+//                         />
+//                       </ListItem>
+//                     </Box>
+//                   )}
+
+//                   {item.groupInvite && (
+//                     <Box>
+//                       {item.groupInvite.map(
+//                         (innerGrp, i) =>
+//                           console.log(
+//                             "innerGrp?.acceptInviteStatus",
+//                             innerGrp?.acceptInviteStatus
+//                           ) || (
+//                             <React.Fragment key={i}>
+//                               <p>{innerGrp.someProperty}</p>
+//                               {innerGrp?.receiverUser === userId &&
+//                                 innerGrp?.acceptInviteStatus === "pending" && (
+//                                   <Box
+//                                     key={i}
+//                                     sx={{
+//                                       width: "100%",
+//                                       display: "flex",
+//                                       justifyContent: "center",
+//                                     }}
+//                                   >
+//                                     <Button
+//                                       variant="contained"
+//                                       onClick={() =>
+//                                         handleAcceptRequestGroup(
+//                                           innerGrp?.receiverUser
+//                                         )
+//                                       }
+//                                     >
+//                                       Accept Invite
+//                                     </Button>
+//                                   </Box>
+//                                 )}
+//                               {console.log(
+//                                 "innerGrp?.senderUser === userId",
+//                                 innerGrp?.senderUser === userId
+//                               )}
+//                               {innerGrp?.senderUser === userId &&
+//                                 innerGrp?.sendInviteStatus === "pending" && (
+//                                   <Box
+//                                     key={i}
+//                                     sx={{
+//                                       width: "100%",
+//                                       display: "flex",
+//                                       justifyContent: "center",
+//                                     }}
+//                                   >
+//                                     <Button
+//                                       variant="contained"
+//                                       onClick={() =>
+//                                         handleAcceptRequestGroup(
+//                                           innerGrp?.receiverUser
+//                                         )
+//                                       }
+//                                     >
+//                                       Send Invites
+//                                     </Button>
+//                                   </Box>
+//                                 )}
+//                             </React.Fragment>
+//                           )
+//                       )}
+//                     </Box>
+//                   )}
+//                 </Box>
+//               ))}
+//             </Box>
+//           ))}
+//         </List>
+//       </Box>
+//     </>
+//   );
+
 //   return (
 //     <>
 //       <Loading isLoading={loading} />
 //       <Container>
-//         <Box
-//           sx={{
-//             display: "flex",
-//             justifyContent: "center",
-//             alignItems: "center",
-//             width: "100%",
-//             border: "1px solid",
-//             //  flexDirection: "column",
-//           }}
-//         >
-//           <Box
-//             sx={{
-//               display: "flex",
-//               justifyContent: "center",
-//               // alignItems: "center",
-//               width: "100%",
-
-//               flexDirection: "column",
-//               // width: { md: "60%", sm: "70%", xs: "100%" },
-//               // boxShadow: theme.palette.background.boxShadow,
-
-//               p: 4,
-//             }}
-//           >
-//             <Button>Group Invite List</Button>
-//             {users ? (
-//               users.map((friend) => {
-//                 console.log("friend", friend);
-//                 const isCurrentUser = friend?._id === userId;
-//                 if (isCurrentUser) {
-//                   return null;
-//                 }
-
-//                 const filteredStatus = friend?.groupInvite?.filter(
-//                   (item) => item?.receiverUser === userId
-//                 );
-
-//                 if (filteredStatus.length === 0) {
-//                   return null;
-//                 }
-
-//                 return <></>;
-//               })
-//             ) : (
-//               <p>Loading users...</p>
-//             )}
-//             <Box>
-//               <List>
-//                 {allFriends.length > 0 ? (
-//                   allFriends?.map(
-//                     (request) =>
-//                       console.log("request", request) || (
-//                         <Box
-//                           key={request?.group?._id}
-//                           sx={{
-//                             // border: "1px solid red",
-//                             my: 1,
-//                             background: theme.palette.background.btnBg,
-//                           }}
-//                         >
-//                           <ListItem
-//                             key={request?.group?._id}
-//                             className={classes?.listItem}
-//                           >
-//                             <ListItemAvatar>
-//                               <Avatar
-//                                 src={`${imgUrl}${request?.group?.avatar}`}
-//                                 alt={request?.group?.name}
-//                               />
-//                             </ListItemAvatar>
-//                             <ListItemText
-//                               primary={`${request?.group?.name} `}
-//                             />
-//                           </ListItem>
-
-//                           <Box sx={{ ml: 2, pb: 1, color: "#1976D2" }}>
-//                             Group Invite Accept
-//                           </Box>
-//                           <ListItem
-//                             key={request?.user?._id}
-//                             className={classes?.listItem}
-//                           >
-//                             <ListItemAvatar>
-//                               <Avatar
-//                                 src={`${imgUrl}${request?.user?.avatar}`}
-//                                 alt={request?.user?.firstName}
-//                               />
-//                             </ListItemAvatar>
-//                             <ListItemText
-//                               primary={`${request?.user?.firstName} ${request?.user?.lastName}`}
-//                             />
-//                             <Button variant="contained" color="primary">
-//                               Accept Invite
-//                             </Button>
-//                           </ListItem>
-//                         </Box>
-//                       )
-//                   )
-//                 ) : (
-//                   <p>No pending Add Member Requests.</p>
-//                 )}
-//               </List>
-//             </Box>
-//           </Box>
+//         <Box>
+//           Group Request Accept
+//           {allMemberList(allFriends)}
 //         </Box>
-//         {/* <FriendList /> */}
 //       </Container>
 //     </>
 //   );
